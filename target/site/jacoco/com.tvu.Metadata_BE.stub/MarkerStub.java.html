@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MarkerStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">MarkerStub.java</span></div><h1>MarkerStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.Marker;
+import com.tvu.Metadata_BE.Model.Records;
+import com.tvu.Metadata_BE.Model.Session;
+import com.tvu.Metadata_BE.dto.MarkerDTO;
+import com.tvu.Metadata_BE.dto.MarkerInfo;
+import com.tvu.Metadata_BE.dto.MarkerResponse;
+import com.tvu.Metadata_BE.dto.ResponseDTO;
+import com.tvu.Metadata_BE.repository.MarkerRepository;
+import com.tvu.Metadata_BE.repository.RecordRepository;
+import com.tvu.Metadata_BE.repository.SessionRepository;
+import com.tvu.Metadata_BE.util.CommonUtility;
+
+
+@Service
+<span class="fc" id="L36">public class MarkerStub {</span>
+
+	@Autowired
+	private MarkerRepository markerepo;
+	@Autowired
+	private RecordRepository recordrepo;
+	@Autowired
+	private SessionRepository sessionrepo;
+
+
+	public ResponseDTO saveMarker(MarkerDTO markerDTO)
+	{
+<span class="nc" id="L48">		ResponseDTO responseDTO=new ResponseDTO();</span>
+<span class="nc" id="L49">		String recordid=null;</span>
+		try{
+			/*if(markerDTO.getEndtimestamp()&gt; 0 &amp;&amp; markerDTO.getEndtimestamp() &lt; markerDTO.getStarttimestamp())
+			{
+				responseDTO.setErrorCode(Constants.API.ERROR_CODE);
+				responseDTO.setErrorMessage(Constants.API.FAIL_MESSAGE);
+				return responseDTO ;   
+			}		*/
+<span class="nc bnc" id="L57" title="All 2 branches missed.">			if(markerDTO.getStarttimestamp()&gt;0)</span>
+			{
+<span class="nc" id="L59">				Marker marker = new Marker();</span>
+<span class="nc" id="L60">				marker.setId(markerDTO.getId());</span>
+<span class="nc" id="L61">				marker.setTitle(markerDTO.getTitle());</span>
+<span class="nc" id="L62">				marker.setSourceSharedMemoryName(markerDTO.getSourcesharedmemoryname());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">				if(sessionrepo.findByProductionid(Long.parseLong(markerDTO.getProductionid()))!=null)</span>
+				{
+<span class="nc" id="L65">					marker.setSessionId(sessionrepo.findByProductionid(Long.parseLong(markerDTO.getProductionid())).getId());</span>
+<span class="nc" id="L66">					marker.setUserId(sessionrepo.findByProductionid(Long.parseLong(markerDTO.getProductionid())).getProducedBy());</span>
+<span class="nc" id="L67">					recordid=sessionrepo.findByProductionid(Long.parseLong(markerDTO.getProductionid())).getId().concat(&quot;_&quot;+markerDTO.getSourcesharedmemoryname()+&quot;_0&quot;);	</span>
+				}
+				else{
+<span class="nc" id="L70">					Session session=sessionrepo.findByUsingTitleLikeProductionid(Long.parseLong(markerDTO.getProductionid()));</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">					if(session!=null)</span>
+					{
+<span class="nc" id="L73">						marker.setSessionId(session.getId());</span>
+<span class="nc" id="L74">						marker.setUserId(session.getProducedBy());</span>
+<span class="nc" id="L75">						recordid=session.getId().concat(&quot;_&quot;+markerDTO.getSourcesharedmemoryname()+&quot;_0&quot;);</span>
+					}
+					else{
+<span class="nc" id="L78">						responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L79">						responseDTO.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+					}
+				}
+<span class="nc" id="L82">				Records record=recordrepo.findById(recordid).get();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">				if(record.getStartTimeStamp()&gt;markerDTO.getStarttimestamp())      </span>
+				{
+<span class="nc" id="L85">					marker.setStartTimeStamp(record.getStartTimeStamp());	</span>
+				}
+<span class="nc" id="L87">				marker.setStartTimeStamp(markerDTO.getStarttimestamp());</span>
+<span class="nc" id="L88">				marker.setEndTimeStamp(markerDTO.getEndtimestamp());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">				if(recordrepo.findById(recordid).get()!= null)</span>
+				{
+<span class="nc" id="L91">					marker.setRecordId(recordid);</span>
+<span class="nc" id="L92">					marker.setSourceId(recordrepo.findById(recordid).get().getSourceId());</span>
+				}
+				try{
+<span class="nc" id="L95">					markerepo.save(marker);</span>
+<span class="nc" id="L96">				}catch (Exception e) {</span>
+					// TODO: handle exception
+<span class="nc" id="L98">					responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L99">					responseDTO.setErrorMessage(e.getMessage().toString());</span>
+<span class="nc" id="L100">				}</span>
+<span class="nc" id="L101">				responseDTO.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L102">				responseDTO.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L103">			}</span>
+			else
+			{
+<span class="nc" id="L106">				responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L107">				responseDTO.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}
+
+<span class="nc" id="L110">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L112">			responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L113">			responseDTO.setErrorMessage(e.getMessage().toString());</span>
+<span class="nc" id="L114">		}</span>
+<span class="nc" id="L115">		return responseDTO;}</span>
+
+	public MarkerResponse getMarkerbySourceid(String sourceid)
+	{
+<span class="nc" id="L119">		MarkerResponse response=new MarkerResponse();</span>
+		try{
+<span class="nc" id="L121">			List&lt;Marker&gt; markerList=markerepo.findBySourceId(sourceid);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">			if(!markerList.isEmpty())</span>
+			{
+<span class="nc" id="L124">				List&lt;MarkerInfo&gt; markerInfos=new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">				for(Marker marker:markerList)</span>
+				{
+<span class="nc" id="L127">					MarkerInfo markerInfo=new MarkerInfo();</span>
+<span class="nc" id="L128">					markerInfo.setId(marker.getId());</span>
+<span class="nc" id="L129">					markerInfo.setShmName(marker.getSourceSharedMemoryName());</span>
+<span class="nc" id="L130">					markerInfo.setTitle(marker.getTitle());</span>
+<span class="nc" id="L131">					markerInfo.setStarttimestamp(marker.getStartTimeStamp());</span>
+<span class="nc" id="L132">					markerInfo.setEndtimestamp(marker.getEndTimeStamp());</span>
+<span class="nc" id="L133">					double timediff=marker.getEndTimeStamp()-marker.getStartTimeStamp();</span>
+<span class="nc" id="L134">					markerInfo.setSize(CommonUtility.calculatedTime(timediff));</span>
+<span class="nc" id="L135">					markerInfos.add(markerInfo);</span>
+<span class="nc" id="L136">				}</span>
+<span class="nc" id="L137">				response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L138">				response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L139">				response.setMarkerinfo(markerInfos);</span>
+<span class="nc" id="L140">			}</span>
+			else
+			{
+<span class="nc" id="L143">				response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L144">				response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}
+<span class="nc" id="L146">		}catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L148">			response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L149">			response.setErrorMessage(e.getMessage().toString());</span>
+<span class="nc" id="L150">		}</span>
+<span class="nc" id="L151">		return response;	</span>
+	}
+	public MarkerResponse getMarkerbyProductionid(String pdId)
+	{
+<span class="nc" id="L155">		MarkerResponse response=new MarkerResponse();</span>
+		try{
+<span class="nc" id="L157">			Session session=sessionrepo.findByProductionid(Long.parseLong(pdId));</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">			if(session==null)</span>
+			{
+<span class="nc" id="L160">				session=sessionrepo.findByUsingTitleLikeProductionid(Long.parseLong(pdId));</span>
+			}
+<span class="nc bnc" id="L162" title="All 2 branches missed.">			if(session!=null){</span>
+<span class="nc" id="L163">				List&lt;Marker&gt; markerList=markerepo.findBySessionid(session.getId());</span>
+<span class="nc" id="L164">				List&lt;MarkerInfo&gt; markerInfos=new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">				for(Marker marker:markerList)</span>
+				{
+<span class="nc" id="L167">					MarkerInfo markerInfo=new MarkerInfo();</span>
+<span class="nc" id="L168">					markerInfo.setId(marker.getId());</span>
+<span class="nc" id="L169">					markerInfo.setShmName(marker.getSourceSharedMemoryName());</span>
+<span class="nc" id="L170">					markerInfo.setTitle(marker.getTitle());</span>
+<span class="nc" id="L171">					markerInfo.setStarttimestamp(marker.getStartTimeStamp());</span>
+<span class="nc" id="L172">					markerInfo.setEndtimestamp(marker.getEndTimeStamp());</span>
+<span class="nc" id="L173">					double timediff=marker.getEndTimeStamp()-marker.getStartTimeStamp();</span>
+<span class="nc" id="L174">					markerInfo.setSize(CommonUtility.calculatedTime(timediff));</span>
+<span class="nc" id="L175">					markerInfos.add(markerInfo);</span>
+<span class="nc" id="L176">				}</span>
+<span class="nc" id="L177">				response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L178">				response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L179">				response.setMarkerinfo(markerInfos);</span>
+<span class="nc" id="L180">			}else{</span>
+<span class="nc" id="L181">				response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L182">				response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}
+<span class="nc" id="L184">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L186">			response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L187">			response.setErrorMessage(e.getMessage().toString());</span>
+<span class="nc" id="L188">		}</span>
+<span class="nc" id="L189">		return response;	</span>
+	}
+
+	public ResponseDTO deleteMarker(String markerid)
+	{
+<span class="nc" id="L194">		ResponseDTO responseDTO=new ResponseDTO();</span>
+		try{
+<span class="nc bnc" id="L196" title="All 2 branches missed.">			if(markerepo.findById(markerid).get()!=null){</span>
+<span class="nc" id="L197">				markerepo.deleteById(markerid);</span>
+<span class="nc" id="L198">				responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L199">				responseDTO.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}else{
+<span class="nc" id="L201">				responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L202">				responseDTO.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}
+<span class="nc" id="L204">		}catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L206">			responseDTO.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L207">			responseDTO.setErrorMessage(e.getMessage().toString());</span>
+<span class="nc" id="L208">		}</span>
+<span class="nc" id="L209">		return responseDTO;</span>
+	}
+	
+	public List&lt;Marker&gt; paginationMarker(int pageNo, int pageSize) {
+		try{
+<span class="nc" id="L214">			Pageable paging = PageRequest.of(pageNo, pageSize);</span>
+<span class="nc" id="L215">			Page&lt;Marker&gt; pagedResult = markerepo.findAll(paging);</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if(pagedResult.hasContent()) {</span>
+<span class="nc" id="L217">	            return pagedResult.getContent();</span>
+	        }
+<span class="nc" id="L219">		}catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L221">			e.getMessage();</span>
+<span class="nc" id="L222">		}</span>
+		
+		
+<span class="nc" id="L225">		return new ArrayList&lt;Marker&gt;();</span>
+		
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

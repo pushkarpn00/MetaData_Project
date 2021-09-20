@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommonUtility.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.util</a> &gt; <span class="el_source">CommonUtility.java</span></div><h1>CommonUtility.java</h1><pre class="source lang-java linenums">package com.tvu.Metadata_BE.util;
+
+import java.io.File;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
+import com.tvu.Metadata_BE.Model.Session;
+import com.tvu.Metadata_BE.Model.Sources;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
+import com.tvu.Metadata_BE.repository.RecordRepository;
+import com.tvu.Metadata_BE.repository.SessionRepository;
+import com.tvu.Metadata_BE.repository.SourceRepository;
+
+
+@Component
+<span class="nc" id="L38">public class CommonUtility {</span>
+
+	@Value(&quot;${ACCESS_KEY_ID}&quot;)
+	private String accessKey;
+	@Value(&quot;${SECRET_ACCESS_KEY}&quot;)
+	private String secretKey;
+	@Value(&quot;${DEFAULT_REGION}&quot;)
+	private String defaultRegion;
+	@Value(&quot;${bucket.region.map}&quot;)
+	private String bucketmap;
+	@Value(&quot;${user.path}&quot;)
+	private String fileBasePath;
+
+	@Autowired
+	SessionRepository sessionrepo;
+	@Autowired
+	DownloadTaskRepository downloadRepo;
+	@Autowired
+	SourceRepository sourceRepo;
+	@Autowired
+	RecordRepository recordRepository;
+
+<span class="nc" id="L60">	String region=null;</span>
+<span class="nc" id="L61">	static Logger logger = Logger.getLogger(CommonUtility.class);</span>
+	public static String calculatedTime(double size)
+	{
+<span class="nc" id="L64">		String calculatedSize = null;</span>
+<span class="nc" id="L65">		double[] recordArray=new double[10];</span>
+<span class="nc" id="L66">		recordArray[0]=(double)size/(double)60000;</span>
+<span class="nc" id="L67">		recordArray[1]=recordArray[0]*12;</span>
+<span class="nc" id="L68">		DecimalFormat RecordnumberFormat = new DecimalFormat(&quot;0.00&quot;);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if(recordArray[1]&gt;0)</span>
+		{
+<span class="nc bnc" id="L71" title="All 2 branches missed.">			if(recordArray[1]&lt;1024)</span>
+			{
+<span class="nc" id="L73">				calculatedSize=(RecordnumberFormat.format(recordArray[1])+&quot; MB&quot;);</span>
+			}
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			else if(recordArray[1]&gt;=1024)</span>
+			{
+<span class="nc" id="L77">				double Recvalue=recordArray[1]/1024;</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">				if(Recvalue&lt;1024) {</span>
+<span class="nc" id="L79">					calculatedSize=(RecordnumberFormat.format(Recvalue)+&quot; GB&quot;);</span>
+				}
+				else
+				{
+<span class="nc" id="L83">					Recvalue = Recvalue /1024;</span>
+<span class="nc" id="L84">					calculatedSize=(RecordnumberFormat.format(Recvalue)+&quot; TB&quot;);</span>
+				}
+<span class="nc" id="L86">			}</span>
+
+		}else {
+<span class="nc" id="L89">			calculatedSize=(&quot;0 MB&quot;);</span>
+		}
+<span class="nc" id="L91">		return calculatedSize;</span>
+	}
+	public void deleteS3Object(Session sessionToDelete,String prefix,Sources source)
+	{
+<span class="nc" id="L95">		logger.info(&quot;*****************deleteS3Object Method stated*****************&quot;);</span>
+		try {
+<span class="nc" id="L97">			ArrayList&lt;KeyVersion&gt; keys = new ArrayList&lt;KeyVersion&gt;();</span>
+<span class="nc" id="L98">			String bucketName=sessionToDelete.getPlaceRootPath().split(&quot;/&quot;)[0];</span>
+<span class="nc" id="L99">			region=bucketmap;</span>
+<span class="nc" id="L100">			region = region.substring(1, region.length()-1);</span>
+<span class="nc" id="L101">			String[] keyValuePairs = region.split(&quot;,&quot;);</span>
+<span class="nc" id="L102">			Map&lt;String,String&gt; map = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">			for(String pair : keyValuePairs)</span>
+			{
+<span class="nc" id="L105">				String[] entry = pair.split(&quot;:&quot;);</span>
+<span class="nc" id="L106">				map.put(entry[0].trim(), entry[1].trim());</span>
+			}
+<span class="nc" id="L108">			region=map.get(bucketName);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">			if(region==null)</span>
+			{
+<span class="nc" id="L111">				region=defaultRegion;</span>
+			}
+<span class="nc" id="L113">			String secretKeyUse=(String)new JSONObject(new String(Base64.getUrlDecoder()</span>
+<span class="nc" id="L114">					.decode(secretKey</span>
+<span class="nc" id="L115">							.substring(secretKey</span>
+<span class="nc" id="L116">									.indexOf(&quot;.&quot;)+1,secretKey</span>
+<span class="nc" id="L117">									.lastIndexOf(&quot;.&quot;)))))</span>
+<span class="nc" id="L118">					.get(&quot;appkey&quot;);</span>
+<span class="nc" id="L119">			logger.info(&quot;accessKey : :&quot;+accessKey+&quot;secrateAccessKey : :&quot;+secretKeyUse+&quot;bucketName : :&quot;+bucketName+&quot;region : :&quot;+region+&quot;Prefix  keys: :&quot;+prefix);</span>
+<span class="nc" id="L120">			BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey,secretKeyUse);</span>
+<span class="nc" id="L121">			AmazonS3 s3Client = AmazonS3ClientBuilder.standard()</span>
+<span class="nc" id="L122">					.withCredentials(new AWSStaticCredentialsProvider(awsCreds))</span>
+<span class="nc" id="L123">					.withRegion(region)</span>
+<span class="nc" id="L124">					.build();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (s3Client.doesBucketExist(bucketName)) {</span>
+<span class="nc" id="L126">				ListObjectsRequest listObjectsRequest = new ListObjectsRequest()</span>
+<span class="nc" id="L127">						.withBucketName(bucketName)</span>
+<span class="nc" id="L128">						.withPrefix(prefix);</span>
+				ObjectListing objectListing;
+				do {
+<span class="nc" id="L131">						objectListing = s3Client.listObjects(listObjectsRequest);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">						for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {</span>
+<span class="nc" id="L133">							keys.add(new KeyVersion(objectSummary.getKey()));</span>
+<span class="nc" id="L134">						}</span>
+<span class="nc" id="L135">						logger.info(keys.size() + &quot; objects successfully added to delete.&quot;);</span>
+<span class="nc" id="L136">						DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest(bucketName)</span>
+<span class="nc" id="L137">								.withKeys(keys)</span>
+<span class="nc" id="L138">								.withQuiet(true);</span>
+<span class="nc" id="L139">						s3Client.deleteObjects(multiObjectDeleteRequest);</span>
+<span class="nc" id="L140">	          listObjectsRequest.setMarker(objectListing.getNextMarker());</span>
+<span class="nc" id="L141">						keys.clear();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">				} while(objectListing.isTruncated());</span>
+<span class="nc" id="L143">				System.out.println(&quot;Deletion of All keys done&quot;);</span>
+<span class="nc" id="L144">				logger.info(&quot;Deletion of keys done&quot;);</span>
+<span class="nc" id="L145">				logger.info(&quot;Deletion of keys done now removing entry from database for id : :&quot;+sessionToDelete.getId());</span>
+			}
+<span class="nc bnc" id="L147" title="All 2 branches missed.">			if(source==null)</span>
+			{
+<span class="nc" id="L149">				logger.info(&quot;DownloadTask table session status changing to deleted...&quot;);</span>
+<span class="nc" id="L150">				List&lt;DownloadTask&gt; downloadTaskList=downloadRepo.getBySessionid(sessionToDelete.getId());</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">				for(DownloadTask downloadtask:downloadTaskList)</span>
+				{
+<span class="nc" id="L153">					downloadtask.setStatus(Constants.API.Delete);</span>
+<span class="nc" id="L154">					File filepath=new File(fileBasePath+&quot;/&quot;+downloadtask.getTaskid()+&quot;/&quot;);</span>
+<span class="nc" id="L155">					FileUtils.deleteDirectory(filepath);</span>
+<span class="nc" id="L156">				}</span>
+<span class="nc" id="L157">			}</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">			else if(source!=null)</span>
+			{
+<span class="nc" id="L160">				logger.info(&quot;DownloadTask table status changing to deleted...&quot;);</span>
+<span class="nc" id="L161">				downloadRepo.getBySourceid(source.getId()).forEach(downloadtask-&gt;downloadtask.setStatus(Constants.API.Delete));</span>
+			}
+<span class="nc" id="L163">			logger.info(&quot;Deletion process completed...&quot;);</span>
+<span class="nc" id="L164">		}catch (Exception e) {</span>
+			// TODO: handle exception
+<span class="nc" id="L166">			logger.info(&quot;Exception occured in s3 object deltion so status changing..&quot;);</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">			if(source==null)</span>
+			{
+<span class="nc" id="L169">				sessionToDelete.setStatus(Constants.API.Merge);</span>
+<span class="nc" id="L170">				sessionrepo.save(sessionToDelete);</span>
+<span class="nc" id="L171">				sourceRepo.findBySessionId(sessionToDelete.getId()).forEach(source1-&gt;source1.setStatus(Constants.API.Merge));</span>
+				/*recordRepository.findAllBySession(sessionToDelete.getId()).forEach(record-&gt;record.set);*/
+<span class="nc" id="L173">				logger.error(&quot;Session restored and error was : : &quot;+e.getMessage());</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">			}else if(source!=null)</span>
+			{
+<span class="nc" id="L176">				source.setStatus(Constants.API.Merge);</span>
+<span class="nc" id="L177">				sourceRepo.save(source);</span>
+<span class="nc" id="L178">				logger.error(&quot;Source restored and error was : : &quot;+e.getMessage());</span>
+			}
+<span class="nc" id="L180">		}</span>
+<span class="nc" id="L181">		logger.info(&quot;*****************AsyncBackGroundWithTaskid Method done*****************&quot;);</span>
+<span class="nc" id="L182">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

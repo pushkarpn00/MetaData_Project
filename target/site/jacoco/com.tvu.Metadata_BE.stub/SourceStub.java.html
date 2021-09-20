@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">SourceStub.java</span></div><h1>SourceStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.Sources;
+import com.tvu.Metadata_BE.dto.SourceDTO;
+import com.tvu.Metadata_BE.dto.SourcesResponse;
+import com.tvu.Metadata_BE.repository.SourceRepository;
+import com.tvu.Metadata_BE.util.CommonUtility;
+
+
+@Service(&quot;sourceStub&quot;)
+<span class="nc" id="L27">public class SourceStub {</span>
+
+	@Autowired
+	private SourceRepository sourceRepository;
+
+<span class="nc" id="L32">	static Logger logger = Logger.getLogger(SourceStub.class);</span>
+
+	/*
+	 * Method to get sources the Details
+	 * */
+	public SourcesResponse getListSourceInfo(String sessionid)
+	{
+<span class="nc" id="L39">		logger.info(&quot;*****************getListSourceInfo Method Stated***************************&quot;);</span>
+<span class="nc" id="L40">		SourcesResponse sourceinfo=new SourcesResponse();</span>
+<span class="nc" id="L41">		sourceinfo.setSessionid(sessionid);</span>
+<span class="nc" id="L42">		List&lt;Sources&gt; listsource=sourceRepository.findBySessionidAndEndTime(sessionid);</span>
+<span class="nc" id="L43">		List&lt;SourceDTO&gt; sourceInfoDTOList=new ArrayList&lt;SourceDTO&gt;();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		for(Sources source:listsource)</span>
+		{
+<span class="nc" id="L46">			SourceDTO sourceInfo=new SourceDTO();</span>
+<span class="nc" id="L47">			sourceInfo.setID(source.getId());</span>
+<span class="nc" id="L48">			sourceInfo.setName(source.getName());</span>
+<span class="nc" id="L49">			sourceInfo.setStatus(source.getStatus());</span>
+<span class="nc" id="L50">			sourceInfo.setStartTimeStamp(source.getStartTime());</span>
+<span class="nc" id="L51">			sourceInfo.setEndTimeStamp(source.getStopTime());</span>
+<span class="nc" id="L52">			double value1=(source.getStopTime()-source.getStartTime());</span>
+<span class="nc" id="L53">			System.out.println(source.getStartTime()+&quot;/&quot;+source.getStopTime());</span>
+<span class="nc" id="L54">			sourceInfo.setSize(CommonUtility.calculatedTime(value1));</span>
+<span class="nc" id="L55">			sourceInfoDTOList.add(sourceInfo);</span>
+<span class="nc" id="L56">		}</span>
+<span class="nc" id="L57">		sourceinfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L58">		sourceinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
+<span class="nc" id="L59">		sourceinfo.setSourcesInfo(sourceInfoDTOList);</span>
+<span class="nc" id="L60">		logger.info(&quot;*****************getListSourceInfo Method Done***************************&quot;);</span>
+<span class="nc" id="L61">		return sourceinfo;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

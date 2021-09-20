@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Marker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.Model</a> &gt; <span class="el_source">Marker.java</span></div><h1>Marker.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.Model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = &quot;marker&quot;)
+<span class="fc" id="L19">public class Marker implements java.io.Serializable{</span>
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name = &quot;id&quot;, nullable = false)
+	private String id;
+	@Column(name=&quot;title&quot;)
+	private String Title;
+	@Column(name=&quot;sourcesharedmemoryname&quot;)
+	private String sourceSharedMemoryName;
+	@Column(name=&quot;recordid&quot;)
+	private String recordId;
+	@Column(name=&quot;sessionid&quot;)
+	private String sessionId;
+	@Column(name=&quot;sourceid&quot;)
+	private String sourceId;
+	@Column(name=&quot;userid&quot;)
+	private String userId;
+	@Column(name=&quot;starttimestamp&quot;)
+	private Long StartTimeStamp;
+	@Column(name=&quot;endtimestamp&quot;)
+	private Long EndTimeStamp;
+	public String getId() {
+<span class="nc" id="L45">		return id;</span>
+	}
+	public void setId(String id) {
+<span class="fc" id="L48">		this.id = id;</span>
+<span class="fc" id="L49">	}</span>
+	public String getTitle() {
+<span class="nc" id="L51">		return Title;</span>
+	}
+	public void setTitle(String title) {
+<span class="fc" id="L54">		Title = title;</span>
+<span class="fc" id="L55">	}</span>
+	public String getSourceSharedMemoryName() {
+<span class="nc" id="L57">		return sourceSharedMemoryName;</span>
+	}
+	public void setSourceSharedMemoryName(String sourceSharedMemoryName) {
+<span class="fc" id="L60">		this.sourceSharedMemoryName = sourceSharedMemoryName;</span>
+<span class="fc" id="L61">	}</span>
+	public String getRecordId() {
+<span class="nc" id="L63">		return recordId;</span>
+	}
+	public void setRecordId(String recordId) {
+<span class="fc" id="L66">		this.recordId = recordId;</span>
+<span class="fc" id="L67">	}</span>
+	public String getSessionId() {
+<span class="nc" id="L69">		return sessionId;</span>
+	}
+	public void setSessionId(String sessionId) {
+<span class="fc" id="L72">		this.sessionId = sessionId;</span>
+<span class="fc" id="L73">	}</span>
+	public String getSourceId() {
+<span class="nc" id="L75">		return sourceId;</span>
+	}
+	public void setSourceId(String sourceId) {
+<span class="fc" id="L78">		this.sourceId = sourceId;</span>
+<span class="fc" id="L79">	}</span>
+	public String getUserId() {
+<span class="nc" id="L81">		return userId;</span>
+	}
+	public void setUserId(String userId) {
+<span class="fc" id="L84">		this.userId = userId;</span>
+<span class="fc" id="L85">	}</span>
+	public Long getStartTimeStamp() {
+<span class="nc" id="L87">		return StartTimeStamp;</span>
+	}
+	public void setStartTimeStamp(Long startTimeStamp) {
+<span class="fc" id="L90">		StartTimeStamp = startTimeStamp;</span>
+<span class="fc" id="L91">	}</span>
+	public Long getEndTimeStamp() {
+<span class="nc" id="L93">		return EndTimeStamp;</span>
+	}
+	public void setEndTimeStamp(Long endTimeStamp) {
+<span class="fc" id="L96">		EndTimeStamp = endTimeStamp;</span>
+<span class="fc" id="L97">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

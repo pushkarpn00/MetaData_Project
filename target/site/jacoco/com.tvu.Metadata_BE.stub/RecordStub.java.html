@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecordStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">RecordStub.java</span></div><h1>RecordStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
+import com.tvu.Metadata_BE.Model.Records;
+import com.tvu.Metadata_BE.Model.Sources;
+import com.tvu.Metadata_BE.dto.RecordInfoDTO;
+import com.tvu.Metadata_BE.dto.RecordInfoRecordDTO;
+import com.tvu.Metadata_BE.dto.ResponseRecordInfo;
+import com.tvu.Metadata_BE.dto.ResponseV2RecordInfo;
+import com.tvu.Metadata_BE.dto.TaskDTO;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
+import com.tvu.Metadata_BE.repository.RecordRepository;
+import com.tvu.Metadata_BE.repository.SourceRepository;
+import com.tvu.Metadata_BE.util.CommonUtility;
+
+
+@Service(&quot;recordStub&quot;)
+<span class="nc" id="L34">public class RecordStub {</span>
+
+	@Autowired
+	private RecordRepository recordInfo;
+	@Autowired
+	private DownloadTaskRepository downloadTaskRepository;
+	@Autowired
+	private SourceRepository sourceRepository;
+<span class="nc" id="L42">	static Logger logger = Logger.getLogger(RecordStub.class);</span>
+
+
+	/*
+	 * Method to get the Record Details
+	 * */
+	public ResponseRecordInfo getRecordInfo(String sessionid)
+	{
+<span class="nc" id="L50">		logger.info(&quot;*****************getRecordinfo Method Stated***************************&quot;);</span>
+<span class="nc" id="L51">		ResponseRecordInfo recordinfo=new ResponseRecordInfo();</span>
+<span class="nc" id="L52">		recordinfo.setSessionid(sessionid);</span>
+<span class="nc" id="L53">		List&lt;Sources&gt; listsource=sourceRepository.findBySessionidAndEndTime(sessionid);</span>
+<span class="nc" id="L54">		List&lt;RecordInfoDTO&gt; recordInfoDTOList=new ArrayList&lt;RecordInfoDTO&gt;();</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		for(Sources source:listsource)</span>
+		{
+<span class="nc" id="L57">			RecordInfoDTO recordInfoDTO=new RecordInfoDTO();</span>
+<span class="nc" id="L58">			recordInfoDTO.setID(source.getId());</span>
+<span class="nc" id="L59">			recordInfoDTO.setName(source.getName());</span>
+<span class="nc" id="L60">			recordInfoDTO.setStatus(source.getStatus());</span>
+<span class="nc" id="L61">			recordInfoDTO.setStartTimeStamp(source.getStartTime());</span>
+<span class="nc" id="L62">			recordInfoDTO.setEndTimeStamp(source.getStopTime());</span>
+<span class="nc" id="L63">			double value1=(source.getStopTime()-source.getStartTime());</span>
+<span class="nc" id="L64">			System.out.println(source.getStartTime()+&quot;/&quot;+source.getStopTime());</span>
+<span class="nc" id="L65">			recordInfoDTO.setSize(CommonUtility.calculatedTime(value1));</span>
+<span class="nc" id="L66">			List&lt;Records&gt; listRecords=recordInfo.getAllRecordBySourceidAndSessionIDAndEndtime(source.getId(), sessionid);</span>
+<span class="nc" id="L67">			List&lt;RecordInfoRecordDTO&gt; listRecordInforRecord=new ArrayList&lt;RecordInfoRecordDTO&gt;();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			for(Records record:listRecords)</span>
+			{
+<span class="nc" id="L70">				RecordInfoRecordDTO recordInfoRecordDTO=new RecordInfoRecordDTO();</span>
+<span class="nc" id="L71">				recordInfoRecordDTO.setID(record.getId());</span>
+<span class="nc" id="L72">				recordInfoRecordDTO.setTitle(record.getTitle());</span>
+<span class="nc" id="L73">				String value=record.getTags();</span>
+<span class="nc" id="L74">				String tag[]=value.split(&quot;,&quot;);</span>
+<span class="nc" id="L75">				List&lt;String&gt; listValue=new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L76">				listValue=Arrays.asList(tag);</span>
+<span class="nc" id="L77">				recordInfoRecordDTO.setTags(listValue);</span>
+<span class="nc" id="L78">				recordInfoRecordDTO.setStartTimeStamp(record.getStartTimeStamp());</span>
+<span class="nc" id="L79">				recordInfoRecordDTO.setEndTimeStamp(record.getEndTimeStamp());</span>
+<span class="nc" id="L80">				double Recvalue1=(record.getEndTimeStamp()-record.getStartTimeStamp());</span>
+<span class="nc" id="L81">				System.out.println(record.getStartTimeStamp()+&quot;/&quot;+record.getEndTimeStamp());</span>
+<span class="nc" id="L82">				recordInfoRecordDTO.setSize(CommonUtility.calculatedTime(Recvalue1));</span>
+<span class="nc" id="L83">				List&lt;DownloadTask&gt; downloadTasks=downloadTaskRepository.getDownloadByRecordAndSession(record.getId(), sessionid);</span>
+<span class="nc" id="L84">				List&lt;TaskDTO&gt; tasks=new ArrayList&lt;TaskDTO&gt;();</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">				if(downloadTasks!=null &amp;&amp; !downloadTasks.isEmpty())</span>
+				{
+<span class="nc bnc" id="L87" title="All 2 branches missed.">					for(DownloadTask downloadTask:downloadTasks)</span>
+					{
+<span class="nc bnc" id="L89" title="All 2 branches missed.">						if(downloadTask.getStatus()!=null)</span>
+						{
+<span class="nc bnc" id="L91" title="All 2 branches missed.">							if(downloadTask.getStatus()==Constants.API.Merge)</span>
+							{
+<span class="nc" id="L93">								TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L94">								task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L95">								task.setEndTimeStamp(0L);</span>
+<span class="nc" id="L96">								task.setStatus(Constants.API.Merge);</span>
+<span class="nc" id="L97">								task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L98">								tasks.add(task);</span>
+<span class="nc" id="L99">							}</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">							else if(downloadTask.getStatus()==Constants.API.Ready)</span>
+							{
+<span class="nc" id="L102">								TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L103">								task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L104">								task.setEndTimeStamp(downloadTask.getMergedtime());</span>
+<span class="nc" id="L105">								task.setStatus(Constants.API.Ready);</span>
+<span class="nc" id="L106">								task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L107">								tasks.add(task);</span>
+
+<span class="nc" id="L109">							}</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">							else if(downloadTask.getStatus()==Constants.API.Failed)</span>
+							{
+<span class="nc" id="L112">								TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L113">								task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L114">								task.setEndTimeStamp(downloadTask.getMergedtime());</span>
+<span class="nc" id="L115">								task.setStatus(Constants.API.Failed);</span>
+<span class="nc" id="L116">								task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L117">								tasks.add(task);</span>
+							}
+						}
+<span class="nc" id="L120">					}</span>
+				}
+				else
+				{
+<span class="nc" id="L124">					TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L125">					task.setStartTimeStamp(0L);</span>
+<span class="nc" id="L126">					task.setEndTimeStamp(0L);</span>
+<span class="nc" id="L127">					task.setStatus(Constants.API.Normal);</span>
+<span class="nc" id="L128">					task.setTaskid(&quot;&quot;);</span>
+<span class="nc" id="L129">					tasks.add(task);</span>
+				}
+<span class="nc" id="L131">				recordInfoRecordDTO.setTasks(tasks);</span>
+<span class="nc" id="L132">				listRecordInforRecord.add(recordInfoRecordDTO);</span>
+<span class="nc" id="L133">			}</span>
+<span class="nc" id="L134">			recordInfoDTO.setRecords(listRecordInforRecord);</span>
+<span class="nc" id="L135">			recordInfoDTOList.add(recordInfoDTO);</span>
+<span class="nc" id="L136">		}</span>
+<span class="nc" id="L137">		recordinfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L138">		recordinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
+<span class="nc" id="L139">		recordinfo.setRecordinfo(recordInfoDTOList);</span>
+<span class="nc" id="L140">		logger.info(&quot;*****************Recordinfo Method Done***************************&quot;);</span>
+<span class="nc" id="L141">		return recordinfo;</span>
+	}
+	/*
+	 * Method to get the V2 Record Details
+	 * */
+	public ResponseV2RecordInfo getV2RecordInfo(String sessionid,String sourceid)
+	{
+<span class="nc" id="L148">		logger.info(&quot;*****************getV2RecordInfo Method Stated***************************&quot;);</span>
+<span class="nc" id="L149">		ResponseV2RecordInfo v2recordinfo=new ResponseV2RecordInfo();</span>
+<span class="nc" id="L150">		v2recordinfo.setSessionid(sessionid);</span>
+<span class="nc" id="L151">		v2recordinfo.setSourceid(sourceid);</span>
+<span class="nc" id="L152">		List&lt;Records&gt; listRecords=recordInfo.getAllRecordBySourceidAndSessionIDAndEndtime(sourceid, sessionid);</span>
+<span class="nc" id="L153">		List&lt;RecordInfoRecordDTO&gt; listRecordInforRecord=new ArrayList&lt;RecordInfoRecordDTO&gt;();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">		for(Records record:listRecords)</span>
+		{
+<span class="nc" id="L156">			RecordInfoRecordDTO recordInfoRecordDTO=new RecordInfoRecordDTO();</span>
+<span class="nc" id="L157">			recordInfoRecordDTO.setID(record.getId());</span>
+<span class="nc" id="L158">			recordInfoRecordDTO.setTitle(record.getTitle());</span>
+<span class="nc" id="L159">			String value=record.getTags();</span>
+<span class="nc" id="L160">			String tag[]=value.split(&quot;,&quot;);</span>
+<span class="nc" id="L161">			List&lt;String&gt; listValue=new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L162">			listValue=Arrays.asList(tag);</span>
+<span class="nc" id="L163">			recordInfoRecordDTO.setTags(listValue);</span>
+<span class="nc" id="L164">			recordInfoRecordDTO.setStartTimeStamp(record.getStartTimeStamp());</span>
+<span class="nc" id="L165">			recordInfoRecordDTO.setEndTimeStamp(record.getEndTimeStamp());</span>
+<span class="nc" id="L166">			double Recvalue1=(record.getEndTimeStamp()-record.getStartTimeStamp());</span>
+<span class="nc" id="L167">			System.out.println(record.getStartTimeStamp()+&quot;/&quot;+record.getEndTimeStamp());</span>
+<span class="nc" id="L168">			recordInfoRecordDTO.setSize(CommonUtility.calculatedTime(Recvalue1));</span>
+<span class="nc" id="L169">			List&lt;DownloadTask&gt; downloadTasks=downloadTaskRepository.getDownloadByRecordAndSession(record.getId(), sessionid);</span>
+<span class="nc" id="L170">			List&lt;TaskDTO&gt; tasks=new ArrayList&lt;TaskDTO&gt;();</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">			if(downloadTasks!=null &amp;&amp; !downloadTasks.isEmpty())</span>
+			{
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				for(DownloadTask downloadTask:downloadTasks)</span>
+				{
+<span class="nc bnc" id="L175" title="All 2 branches missed.">					if(downloadTask.getStatus()!=null)</span>
+					{
+<span class="nc bnc" id="L177" title="All 2 branches missed.">						if(downloadTask.getStatus()==Constants.API.Merge)</span>
+						{
+<span class="nc" id="L179">							TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L180">							task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L181">							task.setEndTimeStamp(0L);</span>
+<span class="nc" id="L182">							task.setStatus(Constants.API.Merge);</span>
+<span class="nc" id="L183">							task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L184">							tasks.add(task);</span>
+<span class="nc" id="L185">						}</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">						else if(downloadTask.getStatus()==Constants.API.Ready)</span>
+						{
+<span class="nc" id="L188">							TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L189">							task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L190">							task.setEndTimeStamp(downloadTask.getMergedtime());</span>
+<span class="nc" id="L191">							task.setStatus(Constants.API.Ready);</span>
+<span class="nc" id="L192">							task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L193">							tasks.add(task);</span>
+
+<span class="nc" id="L195">						}</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">						else if(downloadTask.getStatus()==Constants.API.Failed)</span>
+						{
+<span class="nc" id="L198">							TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L199">							task.setStartTimeStamp(downloadTask.getCreatetime());</span>
+<span class="nc" id="L200">							task.setEndTimeStamp(downloadTask.getMergedtime());</span>
+<span class="nc" id="L201">							task.setStatus(Constants.API.Failed);</span>
+<span class="nc" id="L202">							task.setTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L203">							tasks.add(task);</span>
+						}
+					}
+<span class="nc" id="L206">				}</span>
+			}
+			else
+			{
+<span class="nc" id="L210">				TaskDTO task=new TaskDTO();</span>
+<span class="nc" id="L211">				task.setStartTimeStamp(0L);</span>
+<span class="nc" id="L212">				task.setEndTimeStamp(0L);</span>
+<span class="nc" id="L213">				task.setStatus(Constants.API.Normal);</span>
+<span class="nc" id="L214">				task.setTaskid(&quot;&quot;);</span>
+<span class="nc" id="L215">				tasks.add(task);</span>
+			}
+<span class="nc" id="L217">			recordInfoRecordDTO.setTasks(tasks);</span>
+<span class="nc" id="L218">			listRecordInforRecord.add(recordInfoRecordDTO);</span>
+<span class="nc" id="L219">		}</span>
+<span class="nc" id="L220">		v2recordinfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L221">		v2recordinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
+<span class="nc" id="L222">		v2recordinfo.setRecordinfo(listRecordInforRecord);</span>
+<span class="nc" id="L223">		logger.info(&quot;*****************getV2RecordInfo Method Done***************************&quot;);</span>
+<span class="nc" id="L224">		return v2recordinfo;</span>
+	}
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Session.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.Model</a> &gt; <span class="el_source">Session.java</span></div><h1>Session.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.Model;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = &quot;session&quot;)
+<span class="fc" id="L22">public class Session implements java.io.Serializable{</span>
+	@Id
+	@Column(name = &quot;id&quot;, nullable = false)
+	private String id;
+	@Column(name=&quot;productionid&quot;)
+	private Long productionid;
+	@Column(name=&quot;programid&quot;)
+	private Long programid;
+	@Column(name=&quot;title&quot;)
+	private String Title;
+	@Column(name=&quot;programname&quot;)
+	private String programname;
+	@Column(name=&quot;description&quot;)
+	private String Description;
+	@Column(name=&quot;producedby&quot;)
+	private String producedBy;
+	@Column(name=&quot;status&quot;)
+	private Integer Status;
+	@Column(name=&quot;starttime&quot;)
+	private Long StartTime;
+	@Column(name=&quot;endtime&quot;)
+	private Long EndTime;
+	@Column(name=&quot;placerootpath&quot;)
+	private String PlaceRootPath;
+
+	@OneToMany(mappedBy = &quot;session&quot;, cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY,targetEntity=Sources.class)
+	public Set&lt;Sources&gt; sources;
+	@OneToMany(mappedBy = &quot;session&quot;, cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY,targetEntity=Records.class)
+	public Set&lt;Records&gt; records;
+	@OneToMany(mappedBy = &quot;session&quot;, cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY,targetEntity=ShortStories.class)
+	public Set&lt;ShortStories&gt; shortStories;
+
+
+	public String getId() {
+<span class="nc" id="L59">		return id;</span>
+	}
+	public void setId(String id) {
+<span class="fc" id="L62">		this.id = id;</span>
+<span class="fc" id="L63">	}</span>
+
+	public Long getProductionid() {
+<span class="nc" id="L66">		return productionid;</span>
+	}
+	public void setProductionid(Long productionid) {
+<span class="fc" id="L69">		this.productionid = productionid;</span>
+<span class="fc" id="L70">	}</span>
+	public Long getProgramid() {
+<span class="fc" id="L72">		return programid;</span>
+	}
+	public void setProgramid(Long programid) {
+<span class="fc" id="L75">		this.programid = programid;</span>
+<span class="fc" id="L76">	}</span>
+	public String getProgramname() {
+<span class="nc" id="L78">		return programname;</span>
+	}
+	public void setProgramname(String programname) {
+<span class="fc" id="L81">		this.programname = programname;</span>
+<span class="fc" id="L82">	}</span>
+	public String getTitle() {
+<span class="nc" id="L84">		return Title;</span>
+	}
+	public void setTitle(String title) {
+<span class="fc" id="L87">		Title = title;</span>
+<span class="fc" id="L88">	}</span>
+
+	public String getDescription() {
+<span class="nc" id="L91">		return Description;</span>
+	}
+	public void setDescription(String description) {
+<span class="fc" id="L94">		Description = description;</span>
+<span class="fc" id="L95">	}</span>
+
+	public Integer getStatus() {
+<span class="nc" id="L98">		return Status;</span>
+	}
+	public String getProducedBy() {
+<span class="nc" id="L101">		return producedBy;</span>
+	}
+	public void setProducedBy(String producedBy) {
+<span class="fc" id="L104">		this.producedBy = producedBy;</span>
+<span class="fc" id="L105">	}</span>
+	public void setStatus(Integer integer) {
+<span class="fc" id="L107">		Status = integer;</span>
+<span class="fc" id="L108">	}</span>
+
+	public Long getStartTime() {
+<span class="nc" id="L111">		return StartTime;</span>
+	}
+	public void setStartTime(Long Long) {
+<span class="fc" id="L114">		StartTime = Long;</span>
+<span class="fc" id="L115">	}</span>
+
+	public Long getEndTime() {
+<span class="nc" id="L118">		return EndTime;</span>
+	}
+	public void setEndTime(Long endTime) {
+<span class="fc" id="L121">		EndTime = endTime;</span>
+<span class="fc" id="L122">	}</span>
+	public Set&lt;Sources&gt; getSources() {
+<span class="nc" id="L124">		return sources;</span>
+	}
+	public void setSources(Set&lt;Sources&gt; sources) {
+<span class="fc" id="L127">		this.sources = sources;</span>
+<span class="fc" id="L128">	}</span>
+	public Set&lt;Records&gt; getRecords() {
+<span class="nc" id="L130">		return records;</span>
+	}
+	public void setRecords(Set&lt;Records&gt; records) {
+<span class="fc" id="L133">		this.records = records;</span>
+<span class="fc" id="L134">	}</span>
+	public String getPlaceRootPath() {
+<span class="nc" id="L136">		return PlaceRootPath;</span>
+	}
+	public void setPlaceRootPath(String placeRootPath) {
+<span class="fc" id="L139">		PlaceRootPath = placeRootPath;</span>
+<span class="fc" id="L140">	}</span>
+	public Set&lt;ShortStories&gt; getShortStories() {
+<span class="nc" id="L142">		return shortStories;</span>
+	}
+	public void setShortStories(Set&lt;ShortStories&gt; shortStories) {
+<span class="fc" id="L145">		this.shortStories = shortStories;</span>
+<span class="fc" id="L146">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SessionStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">SessionStub.java</span></div><h1>SessionStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.Records;
+import com.tvu.Metadata_BE.Model.Session;
+import com.tvu.Metadata_BE.Model.Sources;
+import com.tvu.Metadata_BE.dto.DownloadFileRequestDTO;
+import com.tvu.Metadata_BE.dto.DownloadFileResponseDTO;
+import com.tvu.Metadata_BE.dto.ResponseSessionInfo;
+import com.tvu.Metadata_BE.dto.SessionDTO;
+import com.tvu.Metadata_BE.repository.RecordRepository;
+import com.tvu.Metadata_BE.repository.SessionRepository;
+import com.tvu.Metadata_BE.repository.SourceRepository;
+import com.tvu.Metadata_BE.util.CommonUtility;
+
+
+@Service(&quot;SessionStub&quot;)
+<span class="nc" id="L35">public class SessionStub {</span>
+
+	@Autowired
+	private SourceRepository sourcerepo;
+	@Autowired
+	private RecordRepository recordrepo;
+	@Autowired
+	private SessionRepository sessionrepo;
+
+	@Value(&quot;${user.path}&quot;)
+	private String userPath;
+	@Value(&quot;${user.cmdpath}&quot;)
+	private String commandPath;
+	@Value(&quot;${redis.ip}&quot;)
+	private String redisip;
+	@Value(&quot;${redis.port}&quot;)
+	private String port;
+	@Value(&quot;${redis.password}&quot;)
+	private String password;
+
+<span class="nc" id="L55">	static Logger logger = Logger.getLogger(SessionStub.class);</span>
+
+
+	/*
+	 * Method to get the Session Details
+	 * */
+	public ResponseSessionInfo getSessionInfo(String userid,int offset,int limit,String searchparam)
+	{
+<span class="nc" id="L63">		logger.info(&quot;*****************getSessionInfo Method Stated***************************&quot;);</span>
+<span class="nc" id="L64">		ResponseSessionInfo sessioninfo=new ResponseSessionInfo();</span>
+		int countvalue;
+<span class="nc" id="L66">		List&lt;Session&gt; sessions=new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L67">		List&lt;Session&gt; countSession=new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L68">		List&lt;Session&gt; count=sessionrepo.findUsingProducedBy(userid);</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">		if(searchparam!=null &amp;&amp; !searchparam.isEmpty()) {</span>
+<span class="nc" id="L70">			sessions=sessionrepo.getSessionByProducedByWithSearch(userid,offset,limit,searchparam);</span>
+<span class="nc" id="L71">			countSession=sessionrepo.getcount(userid, searchparam);</span>
+<span class="nc" id="L72">			countvalue=countSession.size();</span>
+		}
+		else
+		{
+<span class="nc" id="L76">			sessions=sessionrepo.getSessionByProducedBy(userid,offset,limit);</span>
+<span class="nc" id="L77">			countvalue=count.size();</span>
+		}
+
+<span class="nc" id="L80">		List&lt;SessionDTO&gt; listSession=new ArrayList&lt;SessionDTO&gt;();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		for(Session s:sessions)</span>
+		{
+<span class="nc" id="L83">			SessionDTO session=new SessionDTO();</span>
+<span class="nc" id="L84">			session.setId(s.getId());</span>
+<span class="nc" id="L85">			session.setProgramid(s.getProgramid());</span>
+<span class="nc" id="L86">			session.setProductionid(s.getProductionid());</span>
+<span class="nc" id="L87">			session.setProgramname(s.getProgramname());</span>
+<span class="nc" id="L88">			session.setPlaceRootPath(s.getPlaceRootPath());</span>
+<span class="nc" id="L89">			session.setProducedBy(s.getProducedBy());</span>
+<span class="nc" id="L90">			session.setTitle(s.getTitle());</span>
+<span class="nc" id="L91">			session.setDescription(s.getDescription());</span>
+<span class="nc" id="L92">			session.setStatus(s.getStatus());</span>
+<span class="nc" id="L93">			double value1=(s.getEndTime()-s.getStartTime());</span>
+<span class="nc" id="L94">			System.out.println(s.getStartTime()+&quot;/&quot;+s.getEndTime());</span>
+<span class="nc" id="L95">			session.setSize(CommonUtility.calculatedTime(value1));</span>
+<span class="nc" id="L96">			session.setStartTime(s.getStartTime());</span>
+<span class="nc" id="L97">			session.setEndTime(s.getEndTime());</span>
+<span class="nc" id="L98">			listSession.add(session);</span>
+<span class="nc" id="L99">		}</span>
+<span class="nc" id="L100">		sessioninfo.setTotal_count(count.size());</span>
+<span class="nc" id="L101">		sessioninfo.setCount(countvalue);</span>
+<span class="nc" id="L102">		sessioninfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L103">		sessioninfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
+<span class="nc" id="L104">		sessioninfo.setUserid(userid);</span>
+<span class="nc" id="L105">		sessioninfo.setSessionInfo(listSession);</span>
+<span class="nc" id="L106">		logger.info(&quot;*****************getSessionInfo Method Done***************************&quot;);</span>
+<span class="nc" id="L107">		return sessioninfo;</span>
+
+	}
+
+	/*
+	 * Method to get the params Details to fork the C++ Application
+	 * */
+	public DownloadFileResponseDTO getParamsInfo(String recordid
+			,String sessionid,Long startTime,Long endTime)
+	{
+<span class="nc" id="L117">		logger.info(&quot;*****************getParamsInfo Method Stated***************************&quot;);</span>
+<span class="nc" id="L118">		String starttimestamp=null;</span>
+<span class="nc" id="L119">		String endtimestamp=null;</span>
+<span class="nc" id="L120">		Optional&lt;Session&gt; opssession=sessionrepo.findById(sessionid);</span>
+<span class="nc" id="L121">		Session session=opssession.get();</span>
+<span class="nc" id="L122">		Optional&lt;Records&gt; opsrecord=recordrepo.findById(recordid);</span>
+<span class="nc" id="L123">		Records record=opsrecord.get();</span>
+<span class="nc" id="L124">		Optional&lt;Sources&gt; opssource=sourcerepo.findById(record.getSourceId());</span>
+<span class="nc" id="L125">		Sources source=opssource.get();</span>
+<span class="nc" id="L126">		String placerootpath=session.getPlaceRootPath();</span>
+<span class="nc" id="L127">		String taskid=UUID.randomUUID().toString();</span>
+<span class="nc" id="L128">		String downloadpath= userPath+&quot;/&quot;+taskid;</span>
+<span class="nc bnc" id="L129" title="All 4 branches missed.">		if(startTime!=null &amp;&amp; startTime!=0)</span>
+		{
+<span class="nc" id="L131">			 starttimestamp=Long.toString(startTime);</span>
+		}
+		else
+		{
+<span class="nc" id="L135">			starttimestamp=Long.toString(record.getStartTimeStamp());</span>
+		}
+<span class="nc bnc" id="L137" title="All 4 branches missed.">		if(endTime!=null &amp;&amp; endTime!=0)</span>
+		{
+<span class="nc" id="L139">			 endtimestamp=Long.toString(endTime);</span>
+		}
+		else
+		{
+<span class="nc" id="L143">			endtimestamp=Long.toString(record.getEndTimeStamp());</span>
+		}
+<span class="nc" id="L145">		String filename=downloadpath+&quot;/&quot;+taskid+&quot;.ts&quot;;</span>
+<span class="nc" id="L146">		DownloadFileResponseDTO downloadFileResponseDTO=new DownloadFileResponseDTO();</span>
+<span class="nc" id="L147">		downloadFileResponseDTO.setCmdPath(commandPath);</span>
+<span class="nc" id="L148">		downloadFileResponseDTO.setPlacerootpath(placerootpath);</span>
+<span class="nc" id="L149">		downloadFileResponseDTO.setUsername(session.getProducedBy());</span>
+<span class="nc" id="L150">		downloadFileResponseDTO.setSessionid(sessionid);</span>
+<span class="nc" id="L151">		downloadFileResponseDTO.setSourcename(source.getName());</span>
+<span class="nc" id="L152">		downloadFileResponseDTO.setDownloadpath(downloadpath);</span>
+<span class="nc" id="L153">		downloadFileResponseDTO.setFilename(filename);</span>
+<span class="nc" id="L154">		downloadFileResponseDTO.setStarttimestamp(starttimestamp);</span>
+<span class="nc" id="L155">		downloadFileResponseDTO.setEndtimestamp(endtimestamp);</span>
+<span class="nc" id="L156">		downloadFileResponseDTO.setRedisip(redisip);</span>
+<span class="nc" id="L157">		downloadFileResponseDTO.setPort(port);</span>
+<span class="nc" id="L158">		downloadFileResponseDTO.setPassword(password);</span>
+<span class="nc" id="L159">		downloadFileResponseDTO.setTaskid(taskid);</span>
+<span class="nc" id="L160">		logger.info(&quot;*****************getParamsInfo Method Done***************************&quot;);</span>
+<span class="nc" id="L161">		return downloadFileResponseDTO;</span>
+	}
+
+	public boolean isvalidRequest(DownloadFileRequestDTO req)
+	{
+<span class="nc" id="L166">		Session session=sessionrepo.findBySessionidAndUserid(req.getSessionid(),req.getUserid());</span>
+<span class="nc" id="L167">		Records record=recordrepo.findBySessionidAndRecordid(req.getSessionid(), req.getRecordid());</span>
+<span class="nc" id="L168">		Sources source=sourcerepo.findById(record.getSourceId()).get();</span>
+<span class="nc bnc" id="L169" title="All 8 branches missed.">		if((session!=null) &amp;&amp;(record!=null) &amp;&amp; session.getStatus()!=Constants.API.Delete &amp;&amp; source.getStatus()!=Constants.API.Delete)</span>
+		{
+<span class="nc" id="L171">			return true;</span>
+		}
+<span class="nc" id="L173">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

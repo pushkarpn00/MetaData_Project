@@ -1,0 +1,9 @@
+#spring:
+#  cloud:
+#    config:
+#      uri: http://211.160.178.10:20088/config-server/config/
+#      profile: dev
+#      label: master
+#      name: metadataservice
+#  application:
+#    name: metadataservice

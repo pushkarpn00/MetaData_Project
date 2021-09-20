@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Scheduler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.scheduler</a> &gt; <span class="el_source">Scheduler.java</span></div><h1>Scheduler.java</h1><pre class="source lang-java linenums">/* * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.*/
+package com.tvu.Metadata_BE.scheduler;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
+
+@Service
+<span class="nc" id="L31">public class Scheduler {</span>
+
+<span class="nc" id="L33">	static Logger logger = Logger.getLogger(Scheduler.class);</span>
+	//private static boolean isFinished = false;
+	@Autowired
+	DownloadTaskRepository downloadrepo;
+
+	@Value(&quot;${user.path}&quot;)
+	private String fileBasePath;
+
+	@Scheduled(fixedRate = 4*60*60*1000)
+	public void delete() throws IOException {
+<span class="nc" id="L43">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;);</span>
+<span class="nc" id="L44">		Date now = new Date();</span>
+<span class="nc" id="L45">		String strDate = sdf.format(now);</span>
+<span class="nc" id="L46">		logger.info(&quot;Scheduler Luanched at : : &quot; + strDate);</span>
+<span class="nc" id="L47">		List&lt;DownloadTask&gt; listDownloadTask=downloadrepo.findAll();</span>
+		/*
+		 * Delete unused folder from server after matching with DATABASE
+		 */
+
+<span class="nc" id="L52">		File directoryPath = new File(fileBasePath+&quot;/&quot;);</span>
+<span class="nc" id="L53">		logger.info(&quot;directoryPath : :&quot;+directoryPath);</span>
+<span class="nc" id="L54">		String contents[] = directoryPath.list();</span>
+<span class="nc" id="L55">		logger.info(&quot;Number of folder present in download directories on Server: : &quot;+contents.length);</span>
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		for(int i=0; i&lt;contents.length; i++)</span>
+		{
+<span class="nc" id="L59">			DownloadTask checkforExistance=downloadrepo.findByTaskid(contents[i]);</span>
+<span class="nc bnc" id="L60" title="All 4 branches missed.">			if(checkforExistance==null &amp;&amp; !contents[i].contains(Constants.API.logger))</span>
+			{
+<span class="nc" id="L62">				logger.info(&quot;Operation on : :&quot;+contents[i]);</span>
+<span class="nc" id="L63">				File filepath=new File(fileBasePath+&quot;/&quot;+contents[i]+&quot;/&quot;);</span>
+<span class="nc" id="L64">				FileUtils.deleteDirectory(filepath);</span>
+<span class="nc" id="L65">				logger.info(&quot;^^^^^Directory not found in db :: So,Folder Deleted : :&quot;+filepath+&quot;^^^^^^^^^^^^^^^^&quot;);</span>
+<span class="nc" id="L66">			}</span>
+			/*
+			 * check for download failed directories
+			 */
+<span class="nc bnc" id="L70" title="All 6 branches missed.">			else if(checkforExistance!=null &amp;&amp; ((checkforExistance.getStatus().equals(Constants.API.Failed)||(checkforExistance.getStatus().equals(Constants.API.Delete)))))</span>
+			{
+<span class="nc" id="L72">				logger.info(&quot;Operation on : :&quot;+contents[i]);</span>
+<span class="nc" id="L73">				File filepath=new File(fileBasePath+&quot;/&quot;+contents[i]+&quot;/&quot;);</span>
+<span class="nc" id="L74">				FileUtils.deleteDirectory(filepath);</span>
+<span class="nc" id="L75">				logger.info(&quot;^^^^^^^^^Failed taskid :: So,Folder Deleted : :&quot;+filepath+&quot;^^^^^^^^^^^^^^^^&quot;);</span>
+
+			}
+		}
+
+		/*
+		 * List of all taskid need cleanup and update the status in database
+		 */
+		
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		for(DownloadTask downloadTask:listDownloadTask)</span>
+		{
+<span class="nc" id="L86">			boolean value=checkNeedCleanup(downloadTask.getMergedtime(),downloadTask.getKeepduration());</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">			if(value &amp;&amp; (downloadTask.getStatus()==Constants.API.Ready))</span>
+			{
+<span class="nc" id="L89">				logger.info(&quot;Merged Time : :&quot;+downloadTask.getMergedtime()+&quot;KeepAlive Time : :&quot;+downloadTask.getKeepduration());</span>
+<span class="nc" id="L90">				logger.info(&quot;File &quot;+downloadTask.getFilename()+&quot;Merged Time : :&quot;+downloadTask.getMergedtime()+&quot;KeepAlive Time : :&quot;+downloadTask.getKeepduration());</span>
+<span class="nc" id="L91">				logger.info(&quot;Check For cleanup , KeepDuration Time in hrs was &quot;+downloadTask.getKeepduration()+&quot;===========&gt;&quot;+value);</span>
+<span class="nc" id="L92">				logger.info(&quot;Deleting directory&quot;);</span>
+<span class="nc" id="L93">				Path path=Paths.get(fileBasePath+&quot;/&quot;+downloadTask.getTaskid()+&quot;/&quot;);</span>
+<span class="nc" id="L94">				boolean isDirectory=Files.isDirectory(path);</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">				if(isDirectory){</span>
+<span class="nc" id="L96">					deleteDirectoryStream(path);</span>
+				}
+<span class="nc" id="L98">				DownloadTask downloadTask1=downloadrepo.findByTaskid(downloadTask.getTaskid());</span>
+<span class="nc" id="L99">				downloadTask1.setDeletetime(System.currentTimeMillis());</span>
+<span class="nc" id="L100">				downloadTask1.setStatus(Constants.API.Delete);</span>
+<span class="nc" id="L101">				downloadrepo.save(downloadTask1);</span>
+<span class="nc" id="L102">				logger.info(&quot;Deletion Time updated for Taskid : :&quot;+downloadTask.getTaskid());</span>
+			}
+<span class="nc" id="L104">		}</span>
+
+<span class="nc" id="L106">	}</span>
+	public boolean checkNeedCleanup(Long mergedTime,int keepalive )
+	{
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		if(mergedTime!=null)</span>
+		{
+<span class="nc" id="L111">			Long value1=System.currentTimeMillis()-mergedTime;</span>
+<span class="nc" id="L112">			Long value2=(long) (keepalive*60*60*1000);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			if(value1&gt;value2)</span>
+			{
+				//logger.info(&quot;Taskid has expired so move for cleanup...&quot;);
+<span class="nc" id="L116">				return true;</span>
+			}
+<span class="nc" id="L118">		}</span>
+		else
+		{
+<span class="nc" id="L121">			logger.info(&quot;Merged Time value : : null&quot;);</span>
+		}
+<span class="nc" id="L123">		return false;</span>
+	}
+	void deleteDirectoryStream(Path path) throws IOException {
+<span class="nc" id="L126">		Files.walk(path)</span>
+<span class="nc" id="L127">		.sorted(Comparator.reverseOrder())</span>
+<span class="nc" id="L128">		.map(Path::toFile)</span>
+<span class="nc" id="L129">		.forEach(File::delete);</span>
+<span class="nc" id="L130">	}</span>
+	/*
+	@Scheduled(fixedRate = 2*60*60*1000)
+	public void emptyDirectoryCleanup()
+	{
+		do {
+			isFinished = true;
+			deleteEmptyDirectory(fileBasePath+&quot;/&quot;);
+		} while (!isFinished);
+
+	}
+	private static void deleteEmptyDirectory(String fileLocation) {
+		File folder = new File(fileLocation);
+		File[] listofFiles = folder.listFiles();
+		if (listofFiles.length == 0) {
+			logger.info(&quot;Folder Name :: &quot; + folder.getAbsolutePath() + &quot; is deleted.&quot;);
+			logger.info(&quot;############Empty Directory############Folder Name :: &quot; + folder.getAbsolutePath() + &quot; is deleted.&quot;);
+			folder.delete();
+			isFinished = false;
+		} else {
+			for (int j = 0; j &lt; listofFiles.length; j++) {
+				File file = listofFiles[j];
+				if (file.isDirectory()) {
+					deleteEmptyDirectory(file.getAbsolutePath());
+				}
+			}
+		}
+	}*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetaDataControllerV2.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.controller</a> &gt; <span class="el_source">MetaDataControllerV2.java</span></div><h1>MetaDataControllerV2.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.controller;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+import com.tvu.Metadata_BE.dto.ResponseV2RecordInfo;
+import com.tvu.Metadata_BE.dto.SourcesResponse;
+import com.tvu.Metadata_BE.stub.RecordStub;
+import com.tvu.Metadata_BE.stub.SourceStub;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+@CrossOrigin(origins = &quot;*&quot;)
+@Api(value = &quot;TVU Api for storing and retriving the MetaData Information..&quot;)
+<span class="nc" id="L29">public class MetaDataControllerV2 {</span>
+	
+	@Autowired
+	private RecordStub recordStub;
+	@Autowired
+	private SourceStub sourceStub;
+	
+<span class="nc" id="L36">	static Logger logger = Logger.getLogger(MetaDataControllerV2.class);</span>
+
+	@ApiOperation(value = &quot;To Get List Of Sources&quot;)
+	@GetMapping(&quot;/tvu/MeatadataService/v2/GetSources&quot;)
+	public SourcesResponse getSources(@RequestParam(value = &quot;sessionid&quot;) String sessionid) {
+<span class="nc" id="L41">		logger.info(&quot;Get Sources details on basis of sessionid : :&quot;+sessionid);</span>
+<span class="nc" id="L42">		SourcesResponse sources=sourceStub.getListSourceInfo(sessionid);</span>
+<span class="nc" id="L43">		logger.info(&quot;Get Sources details on basis of sessionid Response  : :&quot;+new Gson().toJson(sources));</span>
+<span class="nc" id="L44">		return sources;</span>
+	}
+	@ApiOperation(value = &quot;To Get RecordInfo For Source&quot;)
+	@GetMapping(&quot;/tvu/MeatadataService/v2/GetRecordInfo&quot;)
+	public ResponseV2RecordInfo getV2Records(@RequestParam(value = &quot;sessionid&quot;) String sessionid,@RequestParam(value = &quot;sourceid&quot;) String sourceid) {
+<span class="nc" id="L49">		logger.info(&quot;Get API request param : :Sessionid : :&quot;+sessionid+&quot;Source id : :&quot;+sourceid);</span>
+<span class="nc" id="L50">		ResponseV2RecordInfo recordinfo=recordStub.getV2RecordInfo(sessionid, sourceid);</span>
+<span class="nc" id="L51">		logger.info(&quot;Get Record Info API  Response  : :&quot;+new Gson().toJson(recordinfo));</span>
+<span class="nc" id="L52">		return recordinfo;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

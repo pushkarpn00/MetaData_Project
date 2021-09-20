@@ -1,0 +1,6 @@
+projectKey=com.tvu:MetaData_Service
+serverUrl=http://localhost:9000
+serverVersion=9.0.1.46107
+dashboardUrl=http://localhost:9000/dashboard?id=com.tvu%3AMetaData_Service
+ceTaskId=AXwDau6Age-fsZJ-iAwx
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AXwDau6Age-fsZJ-iAwx

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetaDataController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.controller</a> &gt; <span class="el_source">MetaDataController.java</span></div><h1>MetaDataController.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.controller;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.Marker;
+import com.tvu.Metadata_BE.dto.CreateDownloadTaskResponse;
+import com.tvu.Metadata_BE.dto.DownloadFileRequestDTO;
+import com.tvu.Metadata_BE.dto.DownloadFileResponseDTO;
+import com.tvu.Metadata_BE.dto.MarkerDTO;
+import com.tvu.Metadata_BE.dto.MarkerResponse;
+import com.tvu.Metadata_BE.dto.MetaDataResponse;
+import com.tvu.Metadata_BE.dto.MetaRequestsDTO;
+import com.tvu.Metadata_BE.dto.ResponseDTO;
+import com.tvu.Metadata_BE.dto.ResponseRecordInfo;
+import com.tvu.Metadata_BE.dto.ResponseSessionInfo;
+import com.tvu.Metadata_BE.dto.StatusResponse;
+import com.tvu.Metadata_BE.stub.CreateTaskStub;
+import com.tvu.Metadata_BE.stub.DownloadFileStub;
+import com.tvu.Metadata_BE.stub.MarkerStub;
+import com.tvu.Metadata_BE.stub.MetadataStub;
+import com.tvu.Metadata_BE.stub.RecordStub;
+import com.tvu.Metadata_BE.stub.SessionStub;
+import com.tvu.Metadata_BE.stub.SourceStub;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@RestController
+@CrossOrigin(origins = &quot;*&quot;)
+@Api(value = &quot;TVU Api for storing and retriving the MetaData Information..&quot;)
+<span class="fc" id="L54">public class MetaDataController {</span>
+	@Autowired
+	private MetadataStub savemetadata;
+	@Autowired
+	private RecordStub recordStub;
+	@Autowired
+	private SessionStub sessionStub;
+	@Autowired
+	private SourceStub sourceStub;
+	@Autowired
+	private DownloadFileStub downloadFileStub;
+	@Autowired
+	private CreateTaskStub createTaskStub;
+	@Autowired
+	private MarkerStub markerStub;
+
+<span class="fc" id="L70">	static Logger logger = Logger.getLogger(MetaDataController.class);</span>
+
+	@ApiOperation(value = &quot;To set the info of Meta Data &quot;)
+	@PostMapping(value = &quot;/tvu/MeatadataService/setMetaData&quot;)
+	public MetaDataResponse setMetaData(@RequestBody MetaRequestsDTO context)
+			throws IOException {
+<span class="nc" id="L76">		logger.info(&quot;Set Meta Data Called with request json : :&quot;+new Gson().toJson(context));</span>
+<span class="nc" id="L77">		MetaDataResponse response=new MetaDataResponse();</span>
+		//System.out.println(context.toString());
+		try {
+<span class="nc" id="L80">			response=savemetadata.saveData(context);</span>
+<span class="nc" id="L81">		} catch(Exception e)	{</span>
+<span class="nc" id="L82">			System.out.println(&quot;exception occured&quot;+e.toString());</span>
+<span class="nc" id="L83">			response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L84">			response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L85">			System.out.println(response);</span>
+<span class="nc" id="L86">			logger.info(&quot;Set Meta Data Response json : :&quot;+new Gson().toJson(response));</span>
+<span class="nc" id="L87">			return response;</span>
+<span class="nc" id="L88">		}</span>
+<span class="nc" id="L89">		logger.info(&quot;Set Meta Data Response json : :&quot;+new Gson().toJson(response));</span>
+<span class="nc" id="L90">		return response;</span>
+	}
+
+	@ApiOperation(value = &quot;To Get SessionInfo&quot;)
+	@GetMapping(&quot;/tvu/MeatadataService/GetSessionInfo&quot;)
+	public ResponseSessionInfo getPart(@RequestParam(value = &quot;userid&quot;) String userid,@RequestParam(value = &quot;offset&quot;) int offset,@RequestParam(value = &quot;limit&quot;) int limit,@RequestParam(value = &quot;searchparam&quot;, required = false) String searchparam) {
+<span class="nc" id="L96">		logger.info(&quot;Get Session Info API  request param : :&quot;+&quot;userid&quot;+userid+&quot;  offset&quot;+offset+&quot;  limit&quot;+limit);</span>
+<span class="nc" id="L97">		ResponseSessionInfo response=sessionStub.getSessionInfo(userid,offset,limit,searchparam);</span>
+<span class="nc" id="L98">		logger.info(&quot;Get Session Info API Response&quot;+new Gson().toJson(response));</span>
+<span class="nc" id="L99">		return response;</span>
+	}
+
+	@ApiOperation(value = &quot;To Get RecordInfo&quot;)
+	@GetMapping(&quot;/tvu/MeatadataService/GetRecordInfo&quot;)
+	public ResponseRecordInfo getRecords(@RequestParam(value = &quot;sessionid&quot;) String sessionid) {
+<span class="nc" id="L105">		logger.info(&quot;Get Record Info API  request param : :&quot;+sessionid);</span>
+<span class="nc" id="L106">		ResponseRecordInfo recordinfo=recordStub.getRecordInfo(sessionid);</span>
+<span class="nc" id="L107">		logger.info(&quot;Get Record Info API  Response  : :&quot;+new Gson().toJson(recordinfo));</span>
+<span class="nc" id="L108">		return recordinfo;</span>
+	}
+
+	@GetMapping(&quot;/tvu/MeatadataService/download/{fileName}&quot;)
+	public ResponseEntity downloadFileFromLocal(@PathVariable String fileName)
+	{
+<span class="nc" id="L114">		logger.info(&quot;Download File API called with file  : :&quot;+fileName);</span>
+<span class="nc" id="L115">		ResponseEntity response=downloadFileStub.getResponseEntiity(fileName);</span>
+<span class="nc" id="L116">		return response;</span>
+	}
+
+	@ApiOperation(value = &quot;Get the DownloadRequest and download link&quot;)
+	@PostMapping(value = &quot;/tvu/MeatadataService/createdownloadtask&quot;)
+	public CreateDownloadTaskResponse downloadTaskResponse(@RequestBody(required = true) DownloadFileRequestDTO downloadrequest)
+	{
+<span class="nc" id="L123">		logger.info(&quot;Create Download task called request   : :&quot;+downloadrequest);</span>
+<span class="nc" id="L124">		CreateDownloadTaskResponse response=new CreateDownloadTaskResponse();</span>
+<span class="nc" id="L125">		boolean isvalid=sessionStub.isvalidRequest(downloadrequest);</span>
+<span class="nc" id="L126">		logger.info(&quot;Is Create Download Request with valid parameter : :&quot;+isvalid);</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if(isvalid)</span>
+		{
+
+<span class="nc" id="L130">			DownloadFileResponseDTO downloadresponse=sessionStub.getParamsInfo(downloadrequest.getRecordid(),downloadrequest.getSessionid(),downloadrequest.getStartTime(),downloadrequest.getEndTime());</span>
+<span class="nc" id="L131">			boolean checkforexist=downloadFileStub.checkForTaskExist(downloadrequest.getRecordid(),downloadrequest.getSessionid(),downloadresponse);</span>
+<span class="nc" id="L132">			logger.info(&quot;Createdownload Request already exist with ready or inprogress : :&quot;+checkforexist);</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">			if(checkforexist)</span>
+			{
+<span class="nc" id="L135">				response=downloadFileStub.getTaskDetails(downloadrequest.getRecordid(),downloadrequest.getSessionid(),downloadresponse);</span>
+			}
+			else
+			{
+<span class="nc" id="L139">				File directory = new File(downloadresponse.getDownloadpath());</span>
+<span class="nc" id="L140">				System.out.println(directory);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">				if (!directory.exists()) {</span>
+<span class="nc" id="L142">					System.out.println(&quot;download folder created&quot;);</span>
+<span class="nc" id="L143">					directory.mkdirs();</span>
+<span class="nc" id="L144">					directory.setReadable(true,false);</span>
+<span class="nc" id="L145">					directory.setWritable(true,false);</span>
+				}else {
+<span class="nc" id="L147">					System.out.println(&quot;download folder exist&quot;);</span>
+				}
+<span class="nc" id="L149">				response=createTaskStub.asyncBackgroundWithTaskid(downloadrequest, downloadresponse);</span>
+			}
+<span class="nc" id="L151">		}</span>
+		else
+		{
+<span class="nc" id="L154">			response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L155">			response.setErrorMessage(Constants.API.INVALID_PARAMETER);</span>
+		}
+<span class="nc" id="L157">		logger.info(&quot;Create Download task Response   : :&quot;+new Gson().toJson(response));</span>
+<span class="nc" id="L158">		return response;</span>
+	}
+
+	@GetMapping(&quot;/tvu/MeatadataService/downloadtask/status&quot;)
+	public StatusResponse value(@RequestParam(value = &quot;taskid&quot;) String taskid)
+	{
+<span class="nc" id="L164">		logger.info(&quot;Download task status api called for taskid  : :&quot;+taskid);</span>
+<span class="nc" id="L165">		return downloadFileStub.getstatus(taskid);</span>
+	}
+	@DeleteMapping(value =&quot;/tvu/MeatadataService/delete&quot;)
+	public ResponseDTO deletesession(@RequestParam(value = &quot;sessionid&quot;, required = true) String sessionid,@RequestParam(value = &quot;sourceid&quot;, required = false) String sourceid) {
+<span class="nc" id="L169">		logger.info(&quot;Delete api called session : :&quot;+sessionid+&quot; Source : :&quot;+sourceid);</span>
+<span class="nc" id="L170">		return savemetadata.deleteWithSessionOrSource(sessionid, sourceid);</span>
+	}
+
+	@ApiOperation(value = &quot;Set value of marker in database&quot;)
+	@PostMapping(value = &quot;/tvu/MeatadataService/marker&quot;)
+	public ResponseDTO setMarker(@RequestBody(required = true) MarkerDTO markerDTO)
+	{
+<span class="nc" id="L177">		logger.info(&quot;Saving Marker Details Started : :&quot;+new Gson().toJson(markerDTO));</span>
+<span class="nc" id="L178">		return markerStub.saveMarker(markerDTO);</span>
+	}
+
+	@GetMapping(value=&quot;/tvu/MeatadataService/marker&quot;/*, params = {&quot;sourceid&quot;,&quot;productionid&quot;}*/)
+	public MarkerResponse getMarkerBySourceOrProductionid(@RequestParam(value = &quot;sourceid&quot;, required = false) String sourceid,@RequestParam(value = &quot;productionid&quot;, required = false) String productionid)
+	{
+<span class="nc" id="L184">		logger.info(&quot;getMarkerBySourceid api called for sourceid  : :&quot;+sourceid +&quot;&amp; productionid &quot; +productionid);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">		if(sourceid!=null){</span>
+<span class="nc" id="L186">			return markerStub.getMarkerbySourceid(sourceid);</span>
+		}else{
+<span class="nc" id="L188">			return markerStub.getMarkerbyProductionid(productionid);</span>
+		}
+	}
+	@DeleteMapping(value =&quot;/tvu/MeatadataService/marker&quot;)
+	public ResponseDTO deleteMarker(@RequestParam(value = &quot;markerid&quot;, required = true) String markerid) {
+<span class="nc" id="L193">		logger.info(&quot;Delete api called for marker : :&quot;+markerid);</span>
+<span class="nc" id="L194">		return markerStub.deleteMarker(markerid);</span>
+	}
+	
+	@GetMapping(value=&quot;/tvu/MeatadataService/marker/pagination&quot;)
+	public List&lt;Marker&gt; getMarkerByPagination(@RequestParam(value = &quot;pageNo&quot;, required = false) int pageNo, @RequestParam(value = &quot;pageSize&quot;, required = false) int pageSize)
+	{
+<span class="nc" id="L200">		logger.info(&quot;getMarkerBySourceid api called for pageNo  : :&quot;+pageNo +&quot;&amp; pageSize &quot; +pageSize);</span>
+<span class="nc bnc" id="L201" title="All 4 branches missed.">		if(pageNo &gt;=0 &amp;&amp; pageSize&gt;=0 ){</span>
+<span class="nc" id="L202">			return markerStub.paginationMarker(pageNo, pageSize);</span>
+		}
+<span class="nc" id="L204">		return null;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

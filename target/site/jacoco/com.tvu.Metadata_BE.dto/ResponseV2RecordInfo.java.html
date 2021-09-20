@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResponseV2RecordInfo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.dto</a> &gt; <span class="el_source">ResponseV2RecordInfo.java</span></div><h1>ResponseV2RecordInfo.java</h1><pre class="source lang-java linenums">package com.tvu.Metadata_BE.dto;
+
+import java.util.List;
+
+<span class="nc" id="L5">public class ResponseV2RecordInfo {</span>
+	private String Sessionid;
+	private String Sourceid;
+	private String ErrorCode;
+	private String ErrorMessage;
+	private List&lt;RecordInfoRecordDTO&gt; recordinfo;
+	public String getSessionid() {
+<span class="nc" id="L12">		return Sessionid;</span>
+	}
+	public void setSessionid(String sessionid) {
+<span class="nc" id="L15">		Sessionid = sessionid;</span>
+<span class="nc" id="L16">	}</span>
+	public String getSourceid() {
+<span class="nc" id="L18">		return Sourceid;</span>
+	}
+	public void setSourceid(String sourceid) {
+<span class="nc" id="L21">		Sourceid = sourceid;</span>
+<span class="nc" id="L22">	}</span>
+	public String getErrorCode() {
+<span class="nc" id="L24">		return ErrorCode;</span>
+	}
+	public void setErrorCode(String errorCode) {
+<span class="nc" id="L27">		ErrorCode = errorCode;</span>
+<span class="nc" id="L28">	}</span>
+	public String getErrorMessage() {
+<span class="nc" id="L30">		return ErrorMessage;</span>
+	}
+	public void setErrorMessage(String errorMessage) {
+<span class="nc" id="L33">		ErrorMessage = errorMessage;</span>
+<span class="nc" id="L34">	}</span>
+	public List&lt;RecordInfoRecordDTO&gt; getRecordinfo() {
+<span class="nc" id="L36">		return recordinfo;</span>
+	}
+	public void setRecordinfo(List&lt;RecordInfoRecordDTO&gt; recordinfo) {
+<span class="nc" id="L39">		this.recordinfo = recordinfo;</span>
+<span class="nc" id="L40">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

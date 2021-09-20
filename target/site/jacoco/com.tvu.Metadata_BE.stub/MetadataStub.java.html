@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetadataStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">MetadataStub.java</span></div><h1>MetadataStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
+import com.tvu.Metadata_BE.Model.Records;
+import com.tvu.Metadata_BE.Model.Scene;
+import com.tvu.Metadata_BE.Model.Session;
+import com.tvu.Metadata_BE.Model.ShortStories;
+import com.tvu.Metadata_BE.Model.Sources;
+import com.tvu.Metadata_BE.dto.MetaDataResponse;
+import com.tvu.Metadata_BE.dto.MetaRequestsDTO;
+import com.tvu.Metadata_BE.dto.RecordsDTO;
+import com.tvu.Metadata_BE.dto.ResponseDTO;
+import com.tvu.Metadata_BE.dto.SceneDTO;
+import com.tvu.Metadata_BE.dto.ShortStoriesDTO;
+import com.tvu.Metadata_BE.dto.SourcesDTO;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
+import com.tvu.Metadata_BE.repository.RecordRepository;
+import com.tvu.Metadata_BE.repository.SceneRepository;
+import com.tvu.Metadata_BE.repository.SessionRepository;
+import com.tvu.Metadata_BE.repository.ShortStoriesRepository;
+import com.tvu.Metadata_BE.repository.SourceRepository;
+import com.tvu.Metadata_BE.util.CommonUtility;
+
+
+@Service
+<span class="nc" id="L42">public class MetadataStub {</span>
+<span class="nc" id="L43">	public String delims=&quot;,&quot;;</span>
+	@Autowired
+	private SessionRepository sessionrepo;
+	@Autowired
+	private RecordRepository recordrepo;
+	@Autowired
+	private SourceRepository sourcerepo;
+	@Autowired
+	private SceneRepository scenerepo;
+	@Autowired
+	private ShortStoriesRepository storyrepo;
+	@Autowired
+	DownloadTaskRepository downloadTaskRepo;
+	@Autowired
+	CommonUtility commonUtil;
+
+<span class="nc" id="L59">	static Logger logger = Logger.getLogger(MetadataStub.class);</span>
+
+	/*
+	 * Method to save
+	 * session,record,short-stories
+	 * and scene using API in Database
+	 * */
+	@Transactional
+	public MetaDataResponse saveData(MetaRequestsDTO context)
+	{
+<span class="nc" id="L69">		logger.info(&quot;*****************saveData Method Stated***************************&quot;);</span>
+<span class="nc" id="L70">		MetaDataResponse response=new MetaDataResponse();</span>
+<span class="nc" id="L71">		Session sessionDTO=new Session();</span>
+<span class="nc" id="L72">		sessionDTO.setId(context.getId());</span>
+<span class="nc" id="L73">		sessionDTO.setProductionid(context.getProductionID());</span>
+<span class="nc" id="L74">		sessionDTO.setProgramid(context.getProgramID());</span>
+<span class="nc" id="L75">		sessionDTO.setProgramname(context.getProgramName());</span>
+<span class="nc" id="L76">		sessionDTO.setTitle(context.getTitle());</span>
+<span class="nc" id="L77">		sessionDTO.setProducedBy(context.getProducedBy());</span>
+<span class="nc" id="L78">		sessionDTO.setStatus(context.getStatus());</span>
+<span class="nc" id="L79">		sessionDTO.setPlaceRootPath(context.getPlaceRootPath());</span>
+<span class="nc" id="L80">		sessionDTO.setStartTime(context.getStartTime());</span>
+<span class="nc" id="L81">		sessionDTO.setEndTime(context.getEndTime());</span>
+<span class="nc" id="L82">		sessionDTO.setDescription(context.getDescription());</span>
+		try {
+<span class="nc" id="L84">			sessionrepo.save(sessionDTO);</span>
+<span class="nc" id="L85">		} catch(ConstraintViolationException exp){</span>
+<span class="nc" id="L86">			logger.error(&quot;ConstraintViolationException occured in session save&quot;);</span>
+<span class="nc" id="L87">		}</span>
+<span class="nc" id="L88">		List&lt;SourcesDTO&gt; sources=context.getSources();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		if(!sources.isEmpty()){</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">			for(SourcesDTO source:sources)</span>
+			{
+<span class="nc" id="L92">				List&lt;RecordsDTO&gt; records=source.getRecords();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">				if(!records.isEmpty()){</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">					for(RecordsDTO record:records)</span>
+					{
+<span class="nc" id="L96">						Records rec=new Records();</span>
+<span class="nc" id="L97">						rec.setId(record.getID());</span>
+<span class="nc" id="L98">						rec.setSession(sessionDTO);</span>
+<span class="nc" id="L99">						rec.setSourceId(source.getID());</span>
+<span class="nc" id="L100">						List&lt;String&gt; tags=record.getTags();</span>
+<span class="nc" id="L101">						rec.setTags(String.join(delims, tags));</span>
+<span class="nc" id="L102">						rec.setTitle(record.getTitle());</span>
+<span class="nc" id="L103">						rec.setStartTimeStamp(record.getStartTimeStamp());</span>
+<span class="nc" id="L104">						rec.setEndTimeStamp(record.getEndTimeStamp());</span>
+						try {
+<span class="nc" id="L106">							recordrepo.save(rec);</span>
+<span class="nc" id="L107">						} catch(ConstraintViolationException exp){</span>
+<span class="nc" id="L108">							logger.error(&quot;ConstraintViolationException occured in record save&quot;);</span>
+<span class="nc" id="L109">						}</span>
+<span class="nc" id="L110">					}</span>
+				}
+<span class="nc" id="L112">				Sources sourceData=new Sources();</span>
+<span class="nc" id="L113">				sourceData.setId(source.getID());</span>
+<span class="nc" id="L114">				sourceData.setName(source.getName());</span>
+<span class="nc" id="L115">				sourceData.setSession(sessionDTO);</span>
+<span class="nc" id="L116">				sourceData.setStatus(source.getStatus());</span>
+<span class="nc" id="L117">				sourceData.setStartTime(source.getStartTimeStamp());</span>
+<span class="nc" id="L118">				sourceData.setStopTime(source.getEndTimeStamp());</span>
+				try {
+<span class="nc" id="L120">					sourcerepo.save(sourceData);</span>
+<span class="nc" id="L121">				} catch(ConstraintViolationException exp){</span>
+<span class="nc" id="L122">					logger.error(&quot;ConstraintViolationException occured in source save&quot;);</span>
+<span class="nc" id="L123">				}</span>
+<span class="nc" id="L124">			}</span>
+		}
+<span class="nc" id="L126">		List&lt;ShortStoriesDTO&gt; shortStories=context.getShortStories();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if(!shortStories.isEmpty()){</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">			for(ShortStoriesDTO story:shortStories)</span>
+			{
+<span class="nc" id="L130">				ShortStories stories=new ShortStories();</span>
+<span class="nc" id="L131">				stories.setId(story.getID());</span>
+<span class="nc" id="L132">				stories.setAurthor(story.getAurthor());</span>
+<span class="nc" id="L133">				stories.setSession(sessionDTO);</span>
+<span class="nc" id="L134">				stories.setFrontCover(story.getFrontCover());</span>
+<span class="nc" id="L135">				List&lt;String&gt; tags=story.getTags();</span>
+<span class="nc" id="L136">				stories.setTag(String.join(delims, tags));</span>
+<span class="nc" id="L137">				stories.setTitle(story.getTitle());</span>
+				//stories.setSourceid(sourceData);;
+<span class="nc" id="L139">				stories.setCreatedAt(story.getCreatedAt());</span>
+				try {
+<span class="nc" id="L141">					storyrepo.save(stories);</span>
+<span class="nc" id="L142">				} catch(ConstraintViolationException exp){</span>
+<span class="nc" id="L143">					logger.error(&quot;ConstraintViolationException occured in shortstories save&quot;);</span>
+<span class="nc" id="L144">				}</span>
+<span class="nc" id="L145">				List&lt;SceneDTO&gt; scenes=story.getScenes();</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">				if(!scenes.isEmpty()){</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">					for(SceneDTO scene:scenes)</span>
+					{
+<span class="nc" id="L149">						Scene sceneData=new Scene();</span>
+<span class="nc" id="L150">						sceneData.setSourceid(scene.getAssociatedSource());</span>
+<span class="nc" id="L151">						sceneData.setShortStory(stories);</span>
+<span class="nc" id="L152">						sceneData.setStartTimeStamp(scene.getStartTimeStamp());</span>
+<span class="nc" id="L153">						sceneData.setStopTimeStamp(scene.getEndTimeStamp());</span>
+						try {
+<span class="nc" id="L155">							scenerepo.save(sceneData);</span>
+<span class="nc" id="L156">						} catch(ConstraintViolationException exp){</span>
+<span class="nc" id="L157">							logger.error(&quot;ConstraintViolationException occured in shortstories save&quot;);</span>
+<span class="nc" id="L158">						}</span>
+<span class="nc" id="L159">					}</span>
+				}
+<span class="nc" id="L161">			}</span>
+		}
+<span class="nc" id="L163">		response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L164">		response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L165">		logger.info(&quot;*****************saveData Method Done***************************&quot;);</span>
+<span class="nc" id="L166">		return response;</span>
+
+	}
+	public ResponseDTO deleteWithSessionOrSource(String sessionid,String sourceid)
+	{
+<span class="nc" id="L171">		logger.info(&quot;*****************deleteWithSessionOrSource Method started***************************&quot;);</span>
+<span class="nc" id="L172">		ResponseDTO response=new ResponseDTO();</span>
+		try{
+<span class="nc" id="L174">			Session sessionuseToDelete=sessionrepo.findById(sessionid).get();</span>
+<span class="nc" id="L175">			List&lt;DownloadTask&gt; downloadTask=downloadTaskRepo.findBySourceidOrSessionid(sourceid, sessionid);</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">			if(downloadTask.isEmpty()) {</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">				if(sessionid!=null &amp;&amp; sourceid==null)</span>
+				{
+<span class="nc" id="L179">					Session session=sessionrepo.findById(sessionid).get();</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">					if(session!=null &amp;&amp; session.getStatus()==Constants.API.Merge)</span>
+					{
+<span class="nc" id="L182">						session.setStatus(Constants.API.Delete);</span>
+<span class="nc" id="L183">						sessionrepo.save(session);</span>
+<span class="nc" id="L184">						new Thread(new Runnable() {</span>
+							public void run()
+							{
+<span class="nc" id="L187">								String cprefix = sessionuseToDelete.getPlaceRootPath().split(&quot;/&quot;)[1]+&quot;/&quot;+sessionuseToDelete.getProducedBy()+&quot;/&quot;+sessionid+&quot;/&quot;;</span>
+<span class="nc" id="L188">								logger.info(&quot;AS:PREFIX is&quot;+cprefix);</span>
+<span class="nc" id="L189">								commonUtil.deleteS3Object(sessionuseToDelete,cprefix,null);</span>
+<span class="nc" id="L190">							}</span>
+
+<span class="nc" id="L192">						}).start();</span>
+<span class="nc" id="L193">						response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L194">						response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+					}
+					else {
+<span class="nc" id="L197">						logger.error(&quot;Given Sessionid status is incompleted or deleted ,so rejecting the request...&quot;);</span>
+<span class="nc" id="L198">						response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L199">						response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+					}
+<span class="nc" id="L201">				}</span>
+<span class="nc bnc" id="L202" title="All 4 branches missed.">				else if (sessionid!=null &amp;&amp; sourceid!=null)</span>
+				{
+<span class="nc" id="L204">					Sources source=sourcerepo.findBySessionidAndSourceid(sessionid, sourceid);</span>
+<span class="nc bnc" id="L205" title="All 4 branches missed.">					if(source!=null &amp;&amp; source.getStatus()==Constants.API.Merge )</span>
+					{
+<span class="nc" id="L207">						source.setStatus(Constants.API.Delete);</span>
+<span class="nc" id="L208">						sourcerepo.save(source);</span>
+<span class="nc" id="L209">						new Thread(new Runnable() {</span>
+							public void run()
+							{
+<span class="nc" id="L212">								commonUtil.deleteS3Object(sessionuseToDelete, sessionuseToDelete.getPlaceRootPath().split(&quot;/&quot;)[1]+&quot;/&quot;+sessionuseToDelete.getProducedBy()+&quot;/&quot;+sessionid+&quot;/&quot;+source.getName()+&quot;/&quot;,source);</span>
+
+<span class="nc" id="L214">							}</span>
+
+<span class="nc" id="L216">						}).start();</span>
+<span class="nc" id="L217">						response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L218">						response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+					}
+					else{
+<span class="nc" id="L221">						logger.error(&quot;Given sourceid ,source not found in records or already deleted or incompleted&quot;);</span>
+<span class="nc" id="L222">						response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L223">						response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+					}
+<span class="nc" id="L225">				}</span>
+			}
+			else{
+<span class="nc" id="L228">				response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L229">				response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+			}
+<span class="nc" id="L231">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L233">			response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L234">			response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+<span class="nc" id="L235">			logger.error(e.getMessage());</span>
+<span class="nc" id="L236">		}</span>
+<span class="nc" id="L237">		logger.info(&quot;*****************deleteWithSessionOrSource Method Done***************************&quot;);</span>
+<span class="nc" id="L238">		return response;</span>
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SceneDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.dto</a> &gt; <span class="el_source">SceneDTO.java</span></div><h1>SceneDTO.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.dto;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.ANY, getterVisibility=JsonAutoDetect.Visibility.NONE,
+setterVisibility=JsonAutoDetect.Visibility.NONE, creatorVisibility=JsonAutoDetect.Visibility.NONE)
+<span class="nc" id="L15">public class SceneDTO {</span>
+	@JsonProperty(&quot;AssociatedSource&quot;)
+	private String AssociatedSource;
+	@JsonProperty(&quot;StartTimestamp&quot;)
+	private Long StartTimeStamp;
+	@JsonProperty(&quot;EndTimestamp&quot;)
+	private Long EndTimeStamp; 
+
+	public String getAssociatedSource() {
+<span class="nc" id="L24">		return AssociatedSource;</span>
+	}
+	public void setAssociatedSource(String associatedSource) {
+<span class="nc" id="L27">		AssociatedSource = associatedSource;</span>
+<span class="nc" id="L28">	}</span>
+	public Long getStartTimeStamp() {
+<span class="nc" id="L30">		return StartTimeStamp;</span>
+	}
+	public void setStartTimeStamp(Long startTimeStamp) {
+<span class="nc" id="L33">		StartTimeStamp = startTimeStamp;</span>
+<span class="nc" id="L34">	}</span>
+	public Long getEndTimeStamp() {
+<span class="nc" id="L36">		return EndTimeStamp;</span>
+	}
+	public void setEndTimeStamp(Long endTimeStamp) {
+<span class="nc" id="L39">		EndTimeStamp = endTimeStamp;</span>
+<span class="nc" id="L40">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

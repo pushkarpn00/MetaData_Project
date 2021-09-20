@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DownloadFileStub.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MetaData_Service</a> &gt; <a href="index.source.html" class="el_package">com.tvu.Metadata_BE.stub</a> &gt; <span class="el_source">DownloadFileStub.java</span></div><h1>DownloadFileStub.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C)2019-2020 TVUNetworks, All Rights Reserved.
+ * This source code and any compilation or derivative thereof is the proprietary
+ * information of TVUNetworks and is confidential in nature.
+ * Under no circumstances is this software to be exposed to or placed
+ * under an Open Source License of any type without the expressed written
+ * permission of TVUNetworks.
+ */
+package com.tvu.Metadata_BE.stub;
+
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
+import com.tvu.Metadata_BE.dto.CreateDownloadTaskResponse;
+import com.tvu.Metadata_BE.dto.DownloadFileResponseDTO;
+import com.tvu.Metadata_BE.dto.StatusResponse;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
+
+
+@Service
+<span class="nc" id="L33">public class DownloadFileStub {</span>
+
+	@Value(&quot;${user.path}&quot;)
+	private String fileBasePath;
+
+	@Autowired
+	DownloadTaskRepository downloadRepo;
+
+<span class="nc" id="L41">	static Logger logger = Logger.getLogger(DownloadFileStub.class);</span>
+
+	//Method to generate the download URL response from local Systems
+	public ResponseEntity getResponseEntiity(String fileName)
+	{
+<span class="nc" id="L46">		logger.info(&quot;*****************getResponseEntiity Method stated*****************&quot;);</span>
+<span class="nc" id="L47">		String basepath = fileBasePath;</span>
+<span class="nc" id="L48">		System.out.println(&quot;Base Path: :&quot;+basepath+&quot;    &quot;+&quot;File Name: :&quot;+fileName);</span>
+<span class="nc" id="L49">		logger.info(&quot;Base Path: :&quot;+basepath+&quot;    &quot;+&quot;File Name: :&quot;+fileName);</span>
+		//String taskdir=fileName.substring(0, fileName.indexOf(&quot;.&quot;));
+<span class="nc" id="L51">		System.out.println(basepath+&quot;/&quot;+fileName+&quot;/&quot;+fileName);</span>
+<span class="nc" id="L52">		Path path = Paths.get(basepath+&quot;/&quot;+fileName+&quot;/&quot;+fileName+&quot;.ts&quot;);</span>
+<span class="nc" id="L53">		UrlResource resource = null;</span>
+		try {
+<span class="nc" id="L55">			resource = new UrlResource(path.toUri());</span>
+<span class="nc" id="L56">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L57">			logger.error(e.toString());</span>
+<span class="nc" id="L58">		}</span>
+<span class="nc" id="L59">		logger.info(&quot;*****************getResponseEntiity Method Done*****************&quot;);</span>
+<span class="nc" id="L60">		return ResponseEntity.ok().</span>
+<span class="nc" id="L61">				contentType(MediaType.parseMediaType(&quot;application/octet-stream&quot;))</span>
+<span class="nc" id="L62">				.header(HttpHeaders.CONTENT_DISPOSITION, &quot;attachment; filename=\&quot;&quot; + resource.getFilename() + &quot;\&quot;&quot;)</span>
+<span class="nc" id="L63">				.body(resource);</span>
+	}
+	public boolean checkForTaskExist(String recordid,String sessionid,DownloadFileResponseDTO downloadresponse)
+	{
+<span class="nc" id="L67">		DownloadTask downloadtask=downloadRepo.getBySessionRecordStartAndEndTime(recordid,sessionid,Long.parseLong(downloadresponse.getStarttimestamp()),Long.parseLong(downloadresponse.getEndtimestamp()));</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		if(downloadtask!=null)</span>
+		{
+<span class="nc" id="L70">			return true;	</span>
+		}
+<span class="nc" id="L72">		return false;</span>
+
+	}
+	public CreateDownloadTaskResponse getTaskDetails(String recordid,String sessionid,DownloadFileResponseDTO downloadresponse)
+	{
+<span class="nc" id="L77">		CreateDownloadTaskResponse response=new CreateDownloadTaskResponse();</span>
+<span class="nc" id="L78">		DownloadTask downloadtask=downloadRepo.getBySessionRecordStartAndEndTime(recordid,sessionid,Long.parseLong(downloadresponse.getStarttimestamp()),Long.parseLong(downloadresponse.getEndtimestamp()));</span>
+<span class="nc" id="L79">		response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L80">		response.setErrorMessage(Constants.API.SUCCESS_MESSAGE);</span>
+<span class="nc" id="L81">		response.setTaskid(downloadtask.getTaskid());</span>
+<span class="nc" id="L82">		response.setStatus(downloadtask.getStatus());</span>
+<span class="nc" id="L83">		return response;</span>
+	}
+
+	public StatusResponse getstatus(String taskid)
+	{
+<span class="nc" id="L88">		StatusResponse response=new StatusResponse();</span>
+<span class="nc" id="L89">		DownloadTask download=null;</span>
+
+		try{
+<span class="nc" id="L92">			download=downloadRepo.findByTaskid(taskid);	</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">			if(download!=null)</span>
+			{
+<span class="nc" id="L95">				response.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L96">				response.setTaskID(taskid);</span>
+<span class="nc" id="L97">				response.setErrorMessage(Constants.API.SUCCESS_CODE);</span>
+<span class="nc" id="L98">				response.setStatus(download.getStatus());		</span>
+			}else
+			{
+<span class="nc" id="L101">				response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L102">				response.setTaskID(taskid);</span>
+<span class="nc" id="L103">				response.setErrorMessage(Constants.API.TaskNOtFound);</span>
+<span class="nc" id="L104">				response.setStatus(Constants.API.taskidnotfound);</span>
+
+			}
+		}
+<span class="nc" id="L108">		catch(Exception e)</span>
+		{
+<span class="nc" id="L110">			logger.error(e.getMessage());</span>
+<span class="nc" id="L111">			response.setErrorCode(Constants.API.ERROR_CODE);</span>
+<span class="nc" id="L112">			response.setTaskID(taskid);</span>
+<span class="nc" id="L113">			response.setErrorMessage(Constants.API.FAIL_MESSAGE);</span>
+<span class="nc" id="L114">			response.setStatus(Constants.API.Failed);	</span>
+<span class="nc" id="L115">		}</span>
+<span class="nc" id="L116">		return response;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
