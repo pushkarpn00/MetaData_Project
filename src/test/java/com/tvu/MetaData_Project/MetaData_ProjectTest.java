@@ -1,13 +1,9 @@
 package com.tvu.MetaData_Project;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -131,5 +127,29 @@ public class MetaData_ProjectTest {
 		assertEquals(responseLikeSession.getProgramid(), new Long("3433"));
 
 	}
+	
+	@Test
+	public void getMarkerbySourceidTest() throws Exception {
+		List<Marker> marker = new ArrayList<>();
+		Marker t1 = new Marker();
+		t1.setId("1");
+		t1.setSessionId("sessionId1");
+		t1.setRecordId("RecordId1");
+		t1.setEndTimeStamp(13847382L);
+		t1.setSourceId("SourceId1");
+		t1.setSourceSharedMemoryName("name1");
+		t1.setStartTimeStamp(33434234L);
+		t1.setTitle("My Title 1");
+		t1.setUserId("TestUser1");
+		marker.add(t1);
+		when(markerepo.findBySourceId("SourceId1")).thenReturn(marker);
+		List<Marker> repo = markerepo.findBySourceId("SourceId1");
+		assertEquals("SourceId1",repo.stream()
+				.filter(val->val.getSourceId()
+				.equals("SourceId1"))
+				.findAny()
+				.get()
+				.getSourceId());
 
+	}
 }
