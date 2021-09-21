@@ -1,2 +1,3 @@
-com\tvu\MetaData_Project\AbstractTest.class
-com\tvu\MetaData_Project\MetaData_ProjectTest.class
+com\tvu\MetaData_BE\test\stub\AbstractTest.class
+com\tvu\MetaData_BE\test\controller\MeataDataControllerTest.class
+com\tvu\MetaData_BE\test\stub\MetaData_ProjectTest.class

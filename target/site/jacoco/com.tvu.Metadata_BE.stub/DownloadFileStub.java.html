@@ -30,7 +30,7 @@ import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 
 
 @Service
-<span class="nc" id="L33">public class DownloadFileStub {</span>
+<span class="fc" id="L33">public class DownloadFileStub {</span>
 
 	@Value(&quot;${user.path}&quot;)
 	private String fileBasePath;
@@ -38,7 +38,7 @@ import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 	@Autowired
 	DownloadTaskRepository downloadRepo;
 
-<span class="nc" id="L41">	static Logger logger = Logger.getLogger(DownloadFileStub.class);</span>
+<span class="fc" id="L41">	static Logger logger = Logger.getLogger(DownloadFileStub.class);</span>
 
 	//Method to generate the download URL response from local Systems
 	public ResponseEntity getResponseEntiity(String fileName)

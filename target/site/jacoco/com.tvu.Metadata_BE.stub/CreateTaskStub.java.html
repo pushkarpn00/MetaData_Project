@@ -32,7 +32,7 @@ import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 import com.tvu.Metadata_BE.repository.RecordRepository;
 
 @Service
-<span class="nc" id="L35">public class CreateTaskStub {</span>
+<span class="fc" id="L35">public class CreateTaskStub {</span>
 	@Autowired
 	DownloadTaskRepository downloadRepo;
 	@Autowired
@@ -49,8 +49,8 @@ import com.tvu.Metadata_BE.repository.RecordRepository;
 	@Value(&quot;${bucket.region.map}&quot;)
 	private String bucketmap;
 	
-<span class="nc" id="L52">	String region=null;</span>
-<span class="nc" id="L53">	static Logger logger = Logger.getLogger(CreateTaskStub.class);</span>
+<span class="fc" id="L52">	String region=null;</span>
+<span class="fc" id="L53">	static Logger logger = Logger.getLogger(CreateTaskStub.class);</span>
 	public CreateDownloadTaskResponse asyncBackgroundWithTaskid(DownloadFileRequestDTO req,DownloadFileResponseDTO downloadFileResponseDTO)
 	{
 <span class="nc" id="L56">		logger.info(&quot;*****************AsyncBackGroundWithTaskid Method stated*****************&quot;);</span>

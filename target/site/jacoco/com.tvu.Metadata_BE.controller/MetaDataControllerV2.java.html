@@ -26,14 +26,14 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @CrossOrigin(origins = &quot;*&quot;)
 @Api(value = &quot;TVU Api for storing and retriving the MetaData Information..&quot;)
-<span class="nc" id="L29">public class MetaDataControllerV2 {</span>
+<span class="fc" id="L29">public class MetaDataControllerV2 {</span>
 	
 	@Autowired
 	private RecordStub recordStub;
 	@Autowired
 	private SourceStub sourceStub;
 	
-<span class="nc" id="L36">	static Logger logger = Logger.getLogger(MetaDataControllerV2.class);</span>
+<span class="fc" id="L36">	static Logger logger = Logger.getLogger(MetaDataControllerV2.class);</span>
 
 	@ApiOperation(value = &quot;To Get List Of Sources&quot;)
 	@GetMapping(&quot;/tvu/MeatadataService/v2/GetSources&quot;)

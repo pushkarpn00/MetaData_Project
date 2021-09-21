@@ -28,9 +28,9 @@ import com.tvu.Metadata_BE.Model.DownloadTask;
 import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 
 @Service
-<span class="nc" id="L31">public class Scheduler {</span>
+<span class="fc" id="L31">public class Scheduler {</span>
 
-<span class="nc" id="L33">	static Logger logger = Logger.getLogger(Scheduler.class);</span>
+<span class="fc" id="L33">	static Logger logger = Logger.getLogger(Scheduler.class);</span>
 	//private static boolean isFinished = false;
 	@Autowired
 	DownloadTaskRepository downloadrepo;
@@ -40,10 +40,10 @@ import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 
 	@Scheduled(fixedRate = 4*60*60*1000)
 	public void delete() throws IOException {
-<span class="nc" id="L43">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;);</span>
-<span class="nc" id="L44">		Date now = new Date();</span>
-<span class="nc" id="L45">		String strDate = sdf.format(now);</span>
-<span class="nc" id="L46">		logger.info(&quot;Scheduler Luanched at : : &quot; + strDate);</span>
+<span class="fc" id="L43">		SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;);</span>
+<span class="fc" id="L44">		Date now = new Date();</span>
+<span class="fc" id="L45">		String strDate = sdf.format(now);</span>
+<span class="fc" id="L46">		logger.info(&quot;Scheduler Luanched at : : &quot; + strDate);</span>
 <span class="nc" id="L47">		List&lt;DownloadTask&gt; listDownloadTask=downloadrepo.findAll();</span>
 		/*
 		 * Delete unused folder from server after matching with DATABASE

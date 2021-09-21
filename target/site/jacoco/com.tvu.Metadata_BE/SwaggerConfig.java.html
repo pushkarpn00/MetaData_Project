@@ -24,24 +24,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /*
  * Configuration Class for swagger UI
  * */
-<span class="nc" id="L27">public class SwaggerConfig {</span>
+<span class="fc" id="L27">public class SwaggerConfig {</span>
 	@Bean
 	public Docket crosscodeApi() {
-<span class="nc" id="L30">		return new Docket(DocumentationType.SWAGGER_2)</span>
-<span class="nc" id="L31">				.groupName(&quot;public-api&quot;)</span>
-<span class="nc" id="L32">				.apiInfo(apiInfo(Constants.API.NAME_API))</span>
-<span class="nc" id="L33">				.select()</span>
-<span class="nc" id="L34">				.apis(RequestHandlerSelectors.basePackage(&quot;com.tvu.Metadata_BE&quot;))</span>
-<span class="nc" id="L35">				.paths(PathSelectors.any()).build();</span>
+<span class="fc" id="L30">		return new Docket(DocumentationType.SWAGGER_2)</span>
+<span class="fc" id="L31">				.groupName(&quot;public-api&quot;)</span>
+<span class="fc" id="L32">				.apiInfo(apiInfo(Constants.API.NAME_API))</span>
+<span class="fc" id="L33">				.select()</span>
+<span class="fc" id="L34">				.apis(RequestHandlerSelectors.basePackage(&quot;com.tvu.Metadata_BE&quot;))</span>
+<span class="fc" id="L35">				.paths(PathSelectors.any()).build();</span>
 	}
 	private ApiInfo apiInfo(String module) {
-<span class="nc" id="L38">		return new ApiInfoBuilder()</span>
-<span class="nc" id="L39">				.title(&quot;TVU &quot; + module + &quot; API&quot;)</span>
-<span class="nc" id="L40">				.description(&quot;List of all the Crosscode &quot; + module + &quot; APIs&quot;)</span>
-<span class="nc" id="L41">				.license(&quot;Apache License Version 2.0&quot;)</span>
-<span class="nc" id="L42">				.licenseUrl(&quot;http://www.apache.org&quot;)</span>
-<span class="nc" id="L43">				.version(&quot;1.0&quot;)</span>
-<span class="nc" id="L44">				.build();</span>
+<span class="fc" id="L38">		return new ApiInfoBuilder()</span>
+<span class="fc" id="L39">				.title(&quot;TVU &quot; + module + &quot; API&quot;)</span>
+<span class="fc" id="L40">				.description(&quot;List of all the Crosscode &quot; + module + &quot; APIs&quot;)</span>
+<span class="fc" id="L41">				.license(&quot;Apache License Version 2.0&quot;)</span>
+<span class="fc" id="L42">				.licenseUrl(&quot;http://www.apache.org&quot;)</span>
+<span class="fc" id="L43">				.version(&quot;1.0&quot;)</span>
+<span class="fc" id="L44">				.build();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
