@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.tvu.MetaData_BE.test.controller.MeataDataControllerTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 43.198 s - in com.tvu.MetaData_BE.test.controller.MeataDataControllerTest

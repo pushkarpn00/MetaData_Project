@@ -2,14 +2,14 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 MetaData_Service,com.tvu.Metadata_BE.util,CommonUtility,473,10,28,0,88,3,18,2,4,2
 MetaData_Service,com.tvu.Metadata_BE.Model,Scene,12,19,0,0,4,9,4,5,4,5
 MetaData_Service,com.tvu.Metadata_BE.Model,DownloadTask,98,3,0,0,42,1,28,1,28,1
-MetaData_Service,com.tvu.Metadata_BE.Model,ShortStories,28,31,0,0,10,15,9,8,9,8
+MetaData_Service,com.tvu.Metadata_BE.Model,ShortStories,0,59,0,0,0,25,0,17,0,17
 MetaData_Service,com.tvu.Metadata_BE.Model,Marker,0,66,0,0,0,28,0,19,0,19
 MetaData_Service,com.tvu.Metadata_BE.Model,Session,39,62,0,0,13,30,13,16,13,16
-MetaData_Service,com.tvu.Metadata_BE.Model,Records,45,7,0,0,19,3,13,2,13,2
+MetaData_Service,com.tvu.Metadata_BE.Model,Records,18,34,0,0,6,16,6,9,6,9
 MetaData_Service,com.tvu.Metadata_BE.Model,Sources,22,23,0,0,8,11,7,6,7,6
 MetaData_Service,com.tvu.Metadata_BE.dto,StatusResponse,31,0,0,0,13,0,9,0,9,0
 MetaData_Service,com.tvu.Metadata_BE.dto,SourcesResponse,31,0,0,0,13,0,9,0,9,0
-MetaData_Service,com.tvu.Metadata_BE.dto,RecordInfoDTO,52,0,0,0,22,0,15,0,15,0
+MetaData_Service,com.tvu.Metadata_BE.dto,RecordInfoDTO,25,27,0,0,9,13,8,7,8,7
 MetaData_Service,com.tvu.Metadata_BE.dto,ResponseV2RecordInfo,38,0,0,0,16,0,11,0,11,0
 MetaData_Service,com.tvu.Metadata_BE.dto,MetaRequestsDTO,94,0,0,0,40,0,27,0,27,0
 MetaData_Service,com.tvu.Metadata_BE.dto,SourcesDTO,45,0,0,0,19,0,13,0,13,0
@@ -25,7 +25,7 @@ MetaData_Service,com.tvu.Metadata_BE.dto,RecordInfoRecordDTO,52,0,0,0,22,0,15,0,
 MetaData_Service,com.tvu.Metadata_BE.dto,SessionDTO,87,0,0,0,37,0,25,0,25,0
 MetaData_Service,com.tvu.Metadata_BE.dto,MetaDataResponse,17,0,0,0,7,0,5,0,5,0
 MetaData_Service,com.tvu.Metadata_BE.dto,RecordsDTO,38,0,0,0,16,0,11,0,11,0
-MetaData_Service,com.tvu.Metadata_BE.dto,ResponseRecordInfo,31,0,0,0,13,0,9,0,9,0
+MetaData_Service,com.tvu.Metadata_BE.dto,ResponseRecordInfo,12,19,0,0,4,9,4,5,4,5
 MetaData_Service,com.tvu.Metadata_BE.dto,ResponseDTO,17,0,0,0,7,0,5,0,5,0
 MetaData_Service,com.tvu.Metadata_BE.dto,MarkerResponse,24,0,0,0,10,0,7,0,7,0
 MetaData_Service,com.tvu.Metadata_BE.dto,DownloadFileResponseDTO,94,0,0,0,40,0,27,0,27,0
