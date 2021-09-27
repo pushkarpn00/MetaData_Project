@@ -3,7 +3,6 @@ package com.tvu.MetaData_BE.test.stub;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,15 +11,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.tvu.Metadata_BE.Model.Marker;
 import com.tvu.Metadata_BE.Model.Records;
 import com.tvu.Metadata_BE.Model.Session;
 import com.tvu.Metadata_BE.Model.ShortStories;
-import com.tvu.Metadata_BE.Model.Sources;
 import com.tvu.Metadata_BE.controller.MetaDataController;
-import com.tvu.Metadata_BE.repository.MarkerRepository;
 import com.tvu.Metadata_BE.repository.RecordRepository;
-import com.tvu.Metadata_BE.repository.SessionRepository;
 import com.tvu.Metadata_BE.repository.ShortStoriesRepository;
 import com.tvu.Metadata_BE.stub.MarkerStub;
 

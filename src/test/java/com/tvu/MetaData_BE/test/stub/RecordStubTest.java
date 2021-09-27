@@ -13,14 +13,20 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.tvu.Metadata_BE.Constants;
+import com.tvu.Metadata_BE.Model.DownloadTask;
 import com.tvu.Metadata_BE.Model.Records;
 import com.tvu.Metadata_BE.Model.Session;
 import com.tvu.Metadata_BE.controller.MetaDataController;
 import com.tvu.Metadata_BE.dto.RecordInfoDTO;
+import com.tvu.Metadata_BE.dto.RecordInfoRecordDTO;
 import com.tvu.Metadata_BE.dto.ResponseRecordInfo;
+import com.tvu.Metadata_BE.dto.ResponseV2RecordInfo;
+import com.tvu.Metadata_BE.dto.TaskDTO;
+import com.tvu.Metadata_BE.repository.DownloadTaskRepository;
 import com.tvu.Metadata_BE.repository.RecordRepository;
 import com.tvu.Metadata_BE.repository.SourceRepository;
 import com.tvu.Metadata_BE.stub.MarkerStub;
+import com.tvu.Metadata_BE.util.CommonUtility;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecordStubTest {
@@ -32,7 +38,7 @@ public class RecordStubTest {
 	private MarkerStub markerStudbUT;
 
 	@Mock
-	private SourceRepository sourceRepository;
+	private DownloadTaskRepository downloadTaskRepository;
 
 	@Mock
 	private RecordRepository recordrepo;
@@ -82,6 +88,66 @@ public class RecordStubTest {
 		
 		responseRecordInfoTest.setRecordinfo(recordInfoDTOList);
 		assertNotNull(responseRecordInfoTest);
+	}
+	
+	@Test 
+	public void getV2RecordInfoTest() throws Exception {
+		ResponseV2RecordInfo v2recordinfo=new ResponseV2RecordInfo();
+		v2recordinfo.setSessionid("");
+		v2recordinfo.setSourceid("");
+		v2recordinfo.setErrorCode(Constants.API.SUCCESS_CODE);
+		v2recordinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);
+		RecordInfoRecordDTO recordInfo = new RecordInfoRecordDTO();
+		recordInfo.setID("TestRecordId");
+		recordInfo.setTitle("Test");
+		List<String> listValue=new ArrayList<>();
+		listValue.add("TestTag1");
+		listValue.add("TestTag2");
+		listValue.add("TestTag3");
+		
+		recordInfo.setTags(listValue);
+		recordInfo.setStartTimeStamp(1349238726L);
+		recordInfo.setEndTimeStamp(1349238726L);
+		recordInfo.setSize("TestSize");
+		
+		TaskDTO taskDtoTest = new TaskDTO();
+		taskDtoTest.setTaskid("TestTaskId");
+		taskDtoTest.setStatus(Constants.API.Normal);
+		taskDtoTest.setStartTimeStamp(1346383858L);
+		taskDtoTest.setEndTimeStamp(1396383853L);
+		List<TaskDTO> listTaskDTO = new ArrayList<>();
+		listTaskDTO.add(taskDtoTest);
+		recordInfo.setTasks(listTaskDTO);
+		DownloadTask downloadTasks = new DownloadTask();
+		downloadTasks.setCreatetime(1368384838L);
+		downloadTasks.setDeletetime(1368384838L);
+		downloadTasks.setEndtime(1368384838L);
+		downloadTasks.setFilename("TestFileName");
+		downloadTasks.setId(1L);
+		downloadTasks.setKeepduration(1234);
+		downloadTasks.setMergedtime(1368384838L);
+		downloadTasks.setRecordid("TestRecordedId");
+		downloadTasks.setSessionid("TestSessionId");
+		downloadTasks.setSourceid("TestSourceId");
+		downloadTasks.setStarttime(1368384838L);
+		downloadTasks.setStatus(0);
+		downloadTasks.setTaskid("TestTaskId");
+		downloadTasks.setUserid("TestUserId");
+		List<DownloadTask> downloadTasksList = new ArrayList<>();
+		
+		downloadTasksList.add(downloadTasks);
+		
+		List<RecordInfoRecordDTO> listRecordInforRecord=new ArrayList<RecordInfoRecordDTO>();
+		listRecordInforRecord.add(recordInfo);
+		v2recordinfo.setRecordinfo(listRecordInforRecord);
+		
+		
+		when(downloadTaskRepository.getDownloadByRecordAndSession("TestSourceId", "202005080318-1fa4c507-618c-4033-877d-4d08b956677b")).thenReturn(downloadTasksList);
+		List<DownloadTask> listRecordsRes = downloadTaskRepository.getDownloadByRecordAndSession("TestSourceId", "202005080318-1fa4c507-618c-4033-877d-4d08b956677b");
+		assertNotNull(listRecordsRes);
+		
+		
+		
 	}
 	
 }
