@@ -1,7 +1,10 @@
 com\tvu\MetaData_BE\test\stub\MarkerStubTest.class
 com\tvu\MetaData_BE\test\controller\SystemControllerTest.class
+com\tvu\MetaData_BE\test\DownloadFileResponseDTOTest.class
 com\tvu\MetaData_BE\test\stub\MetadataStubTest.class
 com\tvu\MetaData_BE\test\stub\SessionStubTest.class
 com\tvu\MetaData_BE\test\stub\RecordStubTest.class
 com\tvu\MetaData_BE\test\ApplicationLuncherTest.class
+com\tvu\MetaData_BE\test\RequestRecordInfoTest.class
+com\tvu\MetaData_BE\test\ConstantsTest.class
 com\tvu\MetaData_BE\test\stub\AbstractTest.class

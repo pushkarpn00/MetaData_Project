@@ -18,7 +18,7 @@ MetaData_Service,com.tvu.Metadata_BE.dto,SourceDTO,45,0,0,0,19,0,13,0,13,0
 MetaData_Service,com.tvu.Metadata_BE.dto,ShortStoriesDTO,52,0,0,0,22,0,15,0,15,0
 MetaData_Service,com.tvu.Metadata_BE.dto,TaskDTO,12,19,0,0,4,9,4,5,4,5
 MetaData_Service,com.tvu.Metadata_BE.dto,MarkerInfo,45,0,0,0,19,0,13,0,13,0
-MetaData_Service,com.tvu.Metadata_BE.dto,RequestRecordInfo,17,0,0,0,7,0,5,0,5,0
+MetaData_Service,com.tvu.Metadata_BE.dto,RequestRecordInfo,0,17,0,0,0,7,0,5,0,5
 MetaData_Service,com.tvu.Metadata_BE.dto,MarkerDTO,45,0,0,0,19,0,13,0,13,0
 MetaData_Service,com.tvu.Metadata_BE.dto,CreateDownloadTaskResponse,31,0,0,0,13,0,9,0,9,0
 MetaData_Service,com.tvu.Metadata_BE.dto,RecordInfoRecordDTO,21,31,0,0,7,15,7,8,7,8
@@ -28,14 +28,14 @@ MetaData_Service,com.tvu.Metadata_BE.dto,RecordsDTO,38,0,0,0,16,0,11,0,11,0
 MetaData_Service,com.tvu.Metadata_BE.dto,ResponseRecordInfo,12,19,0,0,4,9,4,5,4,5
 MetaData_Service,com.tvu.Metadata_BE.dto,ResponseDTO,17,0,0,0,7,0,5,0,5,0
 MetaData_Service,com.tvu.Metadata_BE.dto,MarkerResponse,24,0,0,0,10,0,7,0,7,0
-MetaData_Service,com.tvu.Metadata_BE.dto,DownloadFileResponseDTO,94,0,0,0,40,0,27,0,27,0
+MetaData_Service,com.tvu.Metadata_BE.dto,DownloadFileResponseDTO,0,94,0,0,0,40,0,27,0,27
 MetaData_Service,com.tvu.Metadata_BE.dto,DownloadFileRequestDTO,45,0,0,0,19,0,13,0,13,0
 MetaData_Service,com.tvu.Metadata_BE.dto,SceneDTO,24,0,0,0,10,0,7,0,7,0
 MetaData_Service,com.tvu.Metadata_BE.dto,RequestSessionInfo,24,0,0,0,10,0,7,0,7,0
 MetaData_Service,com.tvu.Metadata_BE.controller,MetaDataController,423,7,12,0,64,2,17,2,11,2
 MetaData_Service,com.tvu.Metadata_BE.controller,MetaDataControllerV2,67,7,0,0,8,2,2,2,2,2
 MetaData_Service,com.tvu.Metadata_BE.controller,SystemController,0,13,0,0,0,2,0,2,0,2
-MetaData_Service,com.tvu.Metadata_BE,Constants.API,3,0,0,0,1,0,1,0,1,0
+MetaData_Service,com.tvu.Metadata_BE,Constants.API,0,3,0,0,0,1,0,1,0,1
 MetaData_Service,com.tvu.Metadata_BE,ApplicationLuncher,0,15,0,0,0,5,0,3,0,3
 MetaData_Service,com.tvu.Metadata_BE,SwaggerConfig,0,54,0,0,0,14,0,3,0,3
 MetaData_Service,com.tvu.Metadata_BE,Constants,3,0,0,0,1,0,1,0,1,0
