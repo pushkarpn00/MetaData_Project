@@ -35,6 +35,9 @@ public class SessionStubTest {
 
 	@Mock
 	private SessionRepository sessionrepo;
+	
+	@Mock
+	private Session sessionUT;
 
 	@Mock
 	private RecordRepository recordrepo;

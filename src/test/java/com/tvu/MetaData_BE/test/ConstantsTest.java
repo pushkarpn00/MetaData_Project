@@ -1,7 +1,6 @@
 package com.tvu.MetaData_BE.test;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Constructor;
@@ -10,7 +9,8 @@ import java.lang.reflect.Modifier;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
 import com.tvu.Metadata_BE.Constants;
 
 @RunWith(MockitoJUnitRunner.class)

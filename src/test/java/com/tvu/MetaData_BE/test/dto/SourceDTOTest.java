@@ -2,14 +2,11 @@ package com.tvu.MetaData_BE.test.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.tvu.Metadata_BE.dto.RecordsDTO;
 import com.tvu.Metadata_BE.dto.SourceDTO;
