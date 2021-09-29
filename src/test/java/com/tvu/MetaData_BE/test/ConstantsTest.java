@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,12 @@ public class ConstantsTest {
 	
 	@InjectMocks
 	private Constants.API api;
+	
+	@Before
+	public void setup() {
+
+		Constants constants = new Constants();
+	}
 	
 	@Test
 	public void testConstantsClassHasNoPublicConstructor() throws NoSuchMethodException, SecurityException{

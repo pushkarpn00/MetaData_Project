@@ -36,29 +36,29 @@ import com.tvu.Metadata_BE.util.CommonUtility;
 	 * */
 	public SourcesResponse getListSourceInfo(String sessionid)
 	{
-<span class="nc" id="L39">		logger.info(&quot;*****************getListSourceInfo Method Stated***************************&quot;);</span>
-<span class="nc" id="L40">		SourcesResponse sourceinfo=new SourcesResponse();</span>
-<span class="nc" id="L41">		sourceinfo.setSessionid(sessionid);</span>
-<span class="nc" id="L42">		List&lt;Sources&gt; listsource=sourceRepository.findBySessionidAndEndTime(sessionid);</span>
-<span class="nc" id="L43">		List&lt;SourceDTO&gt; sourceInfoDTOList=new ArrayList&lt;SourceDTO&gt;();</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">		for(Sources source:listsource)</span>
+<span class="fc" id="L39">		logger.info(&quot;*****************getListSourceInfo Method Stated***************************&quot;);</span>
+<span class="fc" id="L40">		SourcesResponse sourceinfo=new SourcesResponse();</span>
+<span class="fc" id="L41">		sourceinfo.setSessionid(sessionid);</span>
+<span class="fc" id="L42">		List&lt;Sources&gt; listsource=sourceRepository.findBySessionidAndEndTime(sessionid);</span>
+<span class="fc" id="L43">		List&lt;SourceDTO&gt; sourceInfoDTOList=new ArrayList&lt;SourceDTO&gt;();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for(Sources source:listsource)</span>
 		{
-<span class="nc" id="L46">			SourceDTO sourceInfo=new SourceDTO();</span>
-<span class="nc" id="L47">			sourceInfo.setID(source.getId());</span>
-<span class="nc" id="L48">			sourceInfo.setName(source.getName());</span>
-<span class="nc" id="L49">			sourceInfo.setStatus(source.getStatus());</span>
-<span class="nc" id="L50">			sourceInfo.setStartTimeStamp(source.getStartTime());</span>
-<span class="nc" id="L51">			sourceInfo.setEndTimeStamp(source.getStopTime());</span>
-<span class="nc" id="L52">			double value1=(source.getStopTime()-source.getStartTime());</span>
-<span class="nc" id="L53">			System.out.println(source.getStartTime()+&quot;/&quot;+source.getStopTime());</span>
-<span class="nc" id="L54">			sourceInfo.setSize(CommonUtility.calculatedTime(value1));</span>
-<span class="nc" id="L55">			sourceInfoDTOList.add(sourceInfo);</span>
-<span class="nc" id="L56">		}</span>
-<span class="nc" id="L57">		sourceinfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
-<span class="nc" id="L58">		sourceinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
-<span class="nc" id="L59">		sourceinfo.setSourcesInfo(sourceInfoDTOList);</span>
-<span class="nc" id="L60">		logger.info(&quot;*****************getListSourceInfo Method Done***************************&quot;);</span>
-<span class="nc" id="L61">		return sourceinfo;</span>
+<span class="fc" id="L46">			SourceDTO sourceInfo=new SourceDTO();</span>
+<span class="fc" id="L47">			sourceInfo.setID(source.getId());</span>
+<span class="fc" id="L48">			sourceInfo.setName(source.getName());</span>
+<span class="fc" id="L49">			sourceInfo.setStatus(source.getStatus());</span>
+<span class="fc" id="L50">			sourceInfo.setStartTimeStamp(source.getStartTime());</span>
+<span class="fc" id="L51">			sourceInfo.setEndTimeStamp(source.getStopTime());</span>
+<span class="fc" id="L52">			double value1=(source.getStopTime()-source.getStartTime());</span>
+<span class="fc" id="L53">			System.out.println(source.getStartTime()+&quot;/&quot;+source.getStopTime());</span>
+<span class="fc" id="L54">			sourceInfo.setSize(CommonUtility.calculatedTime(value1));</span>
+<span class="fc" id="L55">			sourceInfoDTOList.add(sourceInfo);</span>
+<span class="fc" id="L56">		}</span>
+<span class="fc" id="L57">		sourceinfo.setErrorCode(Constants.API.SUCCESS_CODE);</span>
+<span class="fc" id="L58">		sourceinfo.setErrorMessage(Constants.API.SUCCESS_MESSAGE_GET);</span>
+<span class="fc" id="L59">		sourceinfo.setSourcesInfo(sourceInfoDTOList);</span>
+<span class="fc" id="L60">		logger.info(&quot;*****************getListSourceInfo Method Done***************************&quot;);</span>
+<span class="fc" id="L61">		return sourceinfo;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

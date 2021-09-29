@@ -1,5 +1,7 @@
+com\tvu\MetaData_BE\test\dto\SceneTest.class
 com\tvu\MetaData_BE\test\dto\TaskDTOTest.class
 com\tvu\MetaData_BE\test\dto\RequestRecordInfoTest.class
+com\tvu\MetaData_BE\test\stub\SourceStubTest.class
 com\tvu\MetaData_BE\test\dto\RecordsDTOTest.class
 com\tvu\MetaData_BE\test\dto\DownloadFileResponseDTOTest.class
 com\tvu\MetaData_BE\test\dto\StatusResponseTest.class
@@ -25,6 +27,7 @@ com\tvu\MetaData_BE\test\dto\ShortStoriesDTOTest.class
 com\tvu\MetaData_BE\test\dto\SourcesResponseTest.class
 com\tvu\MetaData_BE\test\dto\MarkerInfoTest.class
 com\tvu\MetaData_BE\test\dto\RequestSessionInfoTest.class
+com\tvu\MetaData_BE\test\dto\SourcesTest.class
 com\tvu\MetaData_BE\test\controller\SystemControllerTest.class
 com\tvu\MetaData_BE\test\dto\CreateDownloadTaskResponseTest.class
 com\tvu\MetaData_BE\test\dto\SourcesDTOTest.class

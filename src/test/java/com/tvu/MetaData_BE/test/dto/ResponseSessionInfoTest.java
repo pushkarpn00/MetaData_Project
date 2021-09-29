@@ -34,7 +34,7 @@ public class ResponseSessionInfoTest {
 		assertEquals(list, responseSessionInfo.getSessionInfo());
 		assertEquals(1, responseSessionInfo.getTotal_count());
 		assertEquals("test", responseSessionInfo.getUserid());
-		assertEquals("test", responseSessionInfo.getErrorCode());
+		assertEquals("test", responseSessionInfo.getErrorMessage());
 
 
 	}
